@@ -152,11 +152,24 @@ details.card summary::after{content:" +";color:var(--accent)}
 details.card[open] summary::after{content:" −"}
 .calgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
 .calgrid .ch{text-align:center;font-size:.7rem;font-weight:600;color:var(--muted);padding:2px 0}
+.here{display:block;text-decoration:none;color:#fff;background:var(--accent);border-radius:16px;padding:16px;box-shadow:0 6px 18px rgba(138,47,99,.25)}
+.here span{display:block}
+.here .small{color:#fff;opacity:.85;text-transform:uppercase;letter-spacing:.06em;font-size:.72rem;font-weight:600}
+.here .hdate{font-family:var(--display);font-size:1.45rem;font-weight:700;margin-top:2px}
+.here .hplan{font-size:1rem;font-weight:600;margin-top:2px}
+.here .hmeta{font-size:.85rem;opacity:.9;margin-top:4px}
+.here .hgo{display:inline-block;margin-top:12px;background:#fff;color:var(--accent);font-weight:700;padding:9px 14px;border-radius:10px}
+.keybox{font-size:.85rem}
+.keyrow{margin-top:6px;line-height:1.9}
+.kc{display:inline-block;font-size:.72rem;font-weight:600;padding:1px 7px;border-radius:6px;border:1px solid var(--line);color:var(--muted)}
+.kc.gymk{color:var(--accent);border-color:var(--accent)}
+.cell.empty{background:none}
+.cell.out{opacity:.35;background:var(--soft)}
 .cell{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-height:62px;border-radius:10px;padding:5px 2px;text-decoration:none;color:var(--fg);border:2px solid transparent;min-width:0;overflow:hidden}
 .cell .dn{font-family:var(--display);font-weight:700;font-size:.95rem;line-height:1.1;text-align:center}
 .cell .dn i{display:block;font-style:normal;font-size:.58rem;font-weight:600;text-transform:uppercase;letter-spacing:.04em;opacity:.75}
 .cell .ic{font-size:.62rem;font-weight:600;color:var(--muted);line-height:1.2;margin-top:2px}
-.cell.gymcell .ic{color:var(--accent);font-size:.82rem;font-weight:700}
+.cell.gymcell .ic{color:var(--accent);font-size:.66rem;font-weight:700}
 .cell .mk{font-size:.7rem;line-height:1.2;color:var(--sage);font-weight:700}
 .cell.istoday{border-color:var(--accent)}
 .btn.light{background:#fff;color:var(--accent)}

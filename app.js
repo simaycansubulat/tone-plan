@@ -118,15 +118,19 @@ const MEAS = [
   { g: "Hips & glutes", k: "hips", n: "Hips (fullest part of glutes)", u: "cm", dir: 1, how: "Feet together. Stand side-on to a mirror and move the tape up and down until you find the fullest part of your glutes. Keep it level all the way round. This should go UP or stay the same as your glutes grow." },
   { g: "Legs", k: "thighTopR", n: "Inner/upper thigh, right (highest point)", u: "cm", dir: -1, how: "Stand with feet hip-width apart and weight on both legs, muscles relaxed. Slide the tape as high as it goes on the right thigh, right up into the groin and just under the glute crease. This tracks the inner thigh." },
   { g: "Legs", k: "thighTopL", n: "Inner/upper thigh, left (highest point)", u: "cm", dir: -1, how: "Same as the right side, on the left leg. Comparing both sides shows if one leg is different." },
-  { g: "Legs", k: "midthigh", n: "Mid-thigh, right", u: "cm", dir: -1, how: "Halfway between the hip crease (front of the hip) and the top of the kneecap. Mark the spot with a pen the first time and measure the same place each time." },
   { g: "Legs", k: "knee", n: "Above the knee, right", u: "cm", dir: -1, how: "Measure around the leg about 5 cm (three fingers) above the top of the kneecap, leg straight and relaxed." },
   { g: "Legs", k: "calf", n: "Calf, right", u: "cm", dir: -1, how: "Stand with weight on both feet. Measure around the widest part of the calf." },
-  { g: "Arms", k: "armTop", n: "Upper arm, top (right)", u: "cm", dir: -1, how: "Arm hanging relaxed. Measure around the arm just below the armpit, as high as the tape goes. Tracks the soft back-of-arm area." },
-  { g: "Arms", k: "armMidR", n: "Upper arm, middle (right)", u: "cm", dir: -1, how: "Arm hanging relaxed. Measure halfway between the tip of your shoulder and your elbow. Don't flex." },
-  { g: "Arms", k: "armMidL", n: "Upper arm, middle (left)", u: "cm", dir: -1, how: "Same as the right side, on the left arm." }
+  { g: "Arms", k: "armR", n: "Upper inner arm, right", u: "cm", dir: -1, how: "Let the arm hang relaxed by your side, palm facing your leg. Find the softest, fullest part of the inner/back of the upper arm, about a third of the way down from the armpit to the elbow. Measure around the arm there, tape level. Don't flex." },
+  { g: "Arms", k: "armL", n: "Upper inner arm, left", u: "cm", dir: -1, how: "Same as the right side, on the left arm, at the same height." }
 ];
-/* migrate old keys from the first version */
-S.meas.forEach(m => { if (m.belly != null && m.navel == null) { m.navel = m.belly; delete m.belly; } if (m.thigh != null && m.thighTopR == null) { m.thighTopR = m.thigh; delete m.thigh; } if (m.arm != null && m.armMidR == null) { m.armMidR = m.arm; delete m.arm; } });
+/* migrate old keys from earlier versions */
+S.meas.forEach(m => {
+  if (m.belly != null && m.navel == null) { m.navel = m.belly; delete m.belly; }
+  if (m.thigh != null && m.thighTopR == null) { m.thighTopR = m.thigh; delete m.thigh; }
+  if (m.arm != null && m.armR == null) { m.armR = m.arm; delete m.arm; }
+  if (m.armMidR != null && m.armR == null) m.armR = m.armMidR; if (m.armTop != null && m.armR == null) m.armR = m.armTop; if (m.armMidL != null && m.armL == null) m.armL = m.armMidL;
+  delete m.armMidR; delete m.armTop; delete m.armMidL; delete m.midthigh;
+});
 function measureDays() {
   const out = []; const st = parseD(S.start);
   for (let i = 0; i < PROGRAM_DAYS; i++) {
@@ -260,31 +264,40 @@ function viewDay(dateIso) {
   ${brace}${blocks}`;
 }
 function viewCalendar() {
-  const st = parseD(S.start); const t = today(); const tI = iso(t); const md = measureDays();
-  const ref = inProgram(t) ? t : (t < st ? st : addD(st, PROGRAM_DAYS - 1));
-  const wk = progWeek(ref); const b = blockOf(wk); const plan = PLAN[DOWKEY[ref.getDay()]]; const ci = cycleAt(ref);
+  const st = parseD(S.start); const end = addD(st, PROGRAM_DAYS - 1); const t = today(); const tI = iso(t); const md = measureDays();
+  const before = t < st, after = t > end;
+  const ref = before ? st : (after ? end : t); const rI = iso(ref);
+  const wk = progWeek(ref); const b = blockOf(wk); const plan = PLAN[DOWKEY[ref.getDay()]]; const ci = cycleAt(ref); const pr = countProgress(rI);
   const nextM = md.find(d => d >= tI);
-  let html = `<div class="hero"><div class="small" style="color:#fff;opacity:.92">${t < st ? "Starts " + esc(fmt(st)) : esc(fmt(ref))} · Week ${wk} of 16 · ${esc(b.name)}</div><h1>${esc(plan.t)}</h1><div class="sub">${esc(plan.s)}</div>${ci ? `<div style="margin-top:8px"><span class="chip ph-${ci.k}">Cycle day ${ci.day} · ${esc(ci.ph.n)}</span></div>` : ""}<a class="btn light" href="#d-${iso(ref)}" style="margin-top:10px">Open ${t < st ? "day 1" : "today"} →</a></div>
-  ${nextM ? `<p class="small" style="margin-top:8px">📏 Next measurement: <b>${esc(fmt(parseD(nextM)))}</b></p>` : ""}
-  <div class="legend"><span class="chip ph-period">Period</span><span class="chip ph-foll">Strong</span><span class="chip ph-ovu">Ovulation</span><span class="chip ph-lut">Luteal</span><span class="chip ph-late">Pre-period</span></div>
-  <p class="small">A, B, C = gym days · 📏 = measure · ✓ = done. Tap a day to open it.</p>`;
-  let curBlock = "";
-  for (let w = 0; w < 16; w++) {
-    const bl = blockOf(w + 1);
-    if (bl.name !== curBlock) {
-      if (curBlock) html += `</div>`;
-      curBlock = bl.name;
-      html += `<h2>${esc(bl.name)} <span class="small">· week${bl.w[0] === bl.w[1] ? " " + bl.w[0] : "s " + bl.w[0] + "–" + bl.w[1]}</span></h2><div class="calgrid"><div class="ch">M</div><div class="ch">T</div><div class="ch">W</div><div class="ch">T</div><div class="ch">F</div><div class="ch">S</div><div class="ch">S</div>`;
+  const label = p => p.gym ? "Gym " + p.t.slice(-1) : (p.dow === 4 ? "Rest" : (p.dow === 6 ? "Yoga" : "Splits"));
+  let html = `<a class="here" href="#d-${rI}">
+    <span class="small">${before ? "Your plan starts" : (after ? "Last day of your plan" : "You are here · today")}</span>
+    <span class="hdate">${esc(ref.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" }))}</span>
+    <span class="hplan">${esc(label(plan))} · ${esc(plan.s.split(" · ").slice(1).join(" · ") || plan.s)}</span>
+    <span class="hmeta">Week ${wk} of 16 · ${esc(b.name)}${ci ? ` · cycle day ${ci.day} (${esc(ci.ph.n)})` : ""}${md.includes(rI) ? " · 📏 measure today" : ""}</span>
+    <span class="hgo">${pr.done ? `${pr.done} of ${pr.total} done · continue` : "Open this day"} →</span></a>
+  ${nextM && nextM !== rI ? `<p class="small" style="margin:8px 0 0">📏 Next measurement: <b>${esc(fmt(parseD(nextM)))}</b></p>` : ""}
+  <div class="card keybox"><b>How to read the calendar</b>
+    <div class="keyrow"><span class="kc gymk">Gym A</span> gym days (A, B, C) · <span class="kc">Splits</span> <span class="kc">Yoga</span> <span class="kc">Rest</span> home days</div>
+    <div class="keyrow">Colour = cycle phase: <span class="chip ph-period">Period</span><span class="chip ph-foll">Strong</span><span class="chip ph-ovu">Ovulation</span><span class="chip ph-lut">Luteal</span><span class="chip ph-late">Pre-period</span></div>
+    <div class="keyrow">📏 measurement day · ✓ finished · • started · outlined = today</div></div>`;
+  let m = new Date(st.getFullYear(), st.getMonth(), 1);
+  while (m <= end) {
+    const y = m.getFullYear(), mo = m.getMonth(); const days = new Date(y, mo + 1, 0).getDate();
+    const lead = (new Date(y, mo, 1).getDay() + 6) % 7;
+    html += `<h2>${esc(m.toLocaleDateString("en-GB", { month: "long", year: "numeric" }))}</h2><div class="calgrid"><div class="ch">Mon</div><div class="ch">Tue</div><div class="ch">Wed</div><div class="ch">Thu</div><div class="ch">Fri</div><div class="ch">Sat</div><div class="ch">Sun</div>`;
+    for (let i = 0; i < lead; i++) html += `<span class="cell empty"></span>`;
+    for (let dn = 1; dn <= days; dn++) {
+      const d = new Date(y, mo, dn); const dI = iso(d);
+      if (d < st || d > end) { html += `<span class="cell out"><span class="dn">${dn}</span></span>`; continue; }
+      const p = PLAN[DOWKEY[d.getDay()]]; const c = cycleAt(d); const pc = countProgress(dI);
+      const mark = (md.includes(dI) ? "📏" : "") + (pc.total && pc.done >= pc.total ? "✓" : (pc.done ? "•" : ""));
+      html += `<a href="#d-${dI}" class="cell ph-${c ? c.k : "none"}${dI === tI ? " istoday" : ""}${p.gym ? " gymcell" : ""}" aria-label="${esc(fmt(d))}: ${esc(label(p))}${c ? ", cycle day " + c.day + ", " + esc(c.ph.n) : ""}"><span class="dn">${dn}</span><span class="ic">${esc(label(p))}</span><span class="mk">${mark}</span></a>`;
     }
-    for (let i = 0; i < 7; i++) {
-      const d = addD(st, w * 7 + i); const dI = iso(d); const p = PLAN[DOWKEY[d.getDay()]]; const c = cycleAt(d); const pr = countProgress(dI);
-      const letter = p.gym ? p.t.slice(-1) : (p.dow === 4 ? "rest" : (p.dow === 6 ? "yoga" : "split"));
-      const done = pr.total && pr.done >= pr.total;
-      const mon = d.getDate() === 1 || (w === 0 && i === 0) ? d.toLocaleDateString("en-GB", { month: "short" }) : "";
-      html += `<a href="#d-${dI}" class="cell ph-${c ? c.k : "none"}${dI === tI ? " istoday" : ""}${p.gym ? " gymcell" : ""}" aria-label="${esc(fmt(d))}, ${esc(p.t)}${c ? ", cycle day " + c.day : ""}"><span class="dn">${d.getDate()}${mon ? `<i>${esc(mon)}</i>` : ""}</span><span class="ic">${esc(letter)}</span><span class="mk">${md.includes(dI) ? "📏" : ""}${done ? "✓" : (pr.done ? "•" : "")}</span></a>`;
-    }
+    html += `</div>`;
+    m = new Date(y, mo + 1, 1);
   }
-  html += `</div>`;
+  html += `<h2>The 16 weeks</h2><div class="card">${BLOCKS.map(bl => `<div class="phase"><div class="w">Week${bl.w[0] === bl.w[1] ? " " + bl.w[0] : "s " + bl.w[0] + "–" + bl.w[1]}</div><div><b>${esc(bl.name)}</b> · ${esc(fmt(addD(st, (bl.w[0] - 1) * 7)))} – ${esc(fmt(addD(st, bl.w[1] * 7 - 1)))}<br><span class="small">${esc(bl.note)}</span></div></div>`).join("")}</div>`;
   return html;
 }
 function viewMeasure() {
@@ -362,7 +375,7 @@ const RECIPES = {
     { n: "Beef & lentil bolognese", p: 35, k: 560, t: "30 min, makes 4", ing: ["500 g 5% beef mince", "120 g red lentils", "1 onion, 2 garlic cloves, 1 carrot", "2 cans chopped tomatoes", "Italian herbs", "Wholewheat pasta or quinoa (60 g dry per portion)"], how: ["Brown the beef with onion, garlic and carrot.", "Add lentils, tomatoes, herbs and 300 ml water.", "Simmer 20 min until the lentils are soft.", "Serve over pasta or quinoa."], tip: "Your best iron meal. Have it during and right after your period." },
     { n: "Etli nohut (beef & chickpea stew)", p: 35, k: 550, t: "40 min, makes 4", ing: ["400 g lean beef, cubed", "2 cans chickpeas", "1 onion, 2 tbsp tomato paste", "1 pepper", "Cumin, paprika", "Quinoa to serve"], how: ["Brown the beef with onion.", "Add tomato paste, pepper, spices and water to cover.", "Simmer 25 min, add chickpeas, cook 10 more.", "Serve with quinoa and a salad."], tip: "Beef + chickpeas = lots of iron." },
     { n: "Air-fryer salmon & quinoa", p: 30, k: 550, t: "15 min", ing: ["120 g salmon fillet", "120 g cooked quinoa", "Broccoli, peppers", "Lemon, garlic, dill"], how: ["Season salmon with lemon, garlic and dill.", "Air fry at 200°C for 10–12 min with the vegetables.", "Serve on quinoa. Take your vitamin D with this meal."] },
-    { n: "Baked köfte with cacık", p: 32, k: 500, t: "30 min", ing: ["125 g 5% beef mince", "½ grated onion, parsley, cumin", "Peppers, courgette, tomato", "Cacık: 150 g yogurt, cucumber, garlic, mint"], how: ["Mix mince with onion, parsley and cumin; shape small köfte.", "Bake with the vegetables at 200°C for 20 min.", "Serve with cacık."] },
+    { n: "Beef & quinoa stuffed peppers", p: 32, k: 500, t: "40 min, makes 3", ing: ["350 g 5% beef mince", "3 large peppers, halved", "150 g cooked quinoa", "1 can chopped tomatoes", "1 onion, garlic, cumin, paprika", "A little grated cheese (optional)"], how: ["Brown the mince with onion, garlic and spices.", "Stir in half the tomatoes and the quinoa.", "Fill the pepper halves, pour the rest of the tomatoes around them.", "Bake at 190°C for 25 min."], tip: "Beef for iron, peppers for vitamin C: a perfect pair." },
     { n: "Chickpea & tofu spinach curry", p: 28, k: 520, t: "25 min", ing: ["150 g firm tofu, cubed", "100 g chickpeas", "Big handful of spinach", "½ can chopped tomatoes", "Curry paste or garam masala, garlic, ginger", "100 g cooked quinoa"], how: ["Crisp the tofu in the air fryer or a pan.", "Cook garlic, ginger and spices, add tomatoes and chickpeas.", "Stir in spinach and tofu. Squeeze lemon on top for vitamin C.", "Serve on quinoa."] },
     { n: "Chicken fajita quinoa bowl", p: 38, k: 540, t: "20 min", ing: ["130 g chicken breast, sliced", "Peppers, onion", "Fajita spice", "100 g cooked quinoa", "Salsa, 2 tbsp Greek yogurt"], how: ["Toss chicken and peppers in the spice.", "Pan-fry or air fry for 12–15 min.", "Serve on quinoa with salsa and yogurt."] },
     { n: "Sheet-pan lemon chicken & chickpeas", p: 40, k: 520, t: "30 min", ing: ["130 g chicken breast", "100 g chickpeas", "Red onion, peppers, courgette", "Lemon, garlic, oregano, 1 tsp olive oil"], how: ["Put everything on a tray with lemon, garlic, oregano and oil.", "Roast at 200°C for 25 min."] }
@@ -394,14 +407,14 @@ function viewFood() {
     <div class="meal"><span class="m">Dinner</span><span class="k">~33 g · 550</span><small>Pick one dinner</small></div>
     <div class="total"><span>Total</span><span>~118 g · ~1,650–1,750 kcal</span></div></div>
   ${Object.entries(RECIPES).map(([g, list]) => `<h2>${esc(g)}</h2>${list.map(recipeHTML).join("")}`).join("")}
-  <h2>Sunday meal prep (45 min)</h2><div class="card"><ol class="clean"><li>Bake 600 g chicken breast: 200°C for 18–20 min (see the tips below).</li><li>Cook 250 g dry quinoa (makes about 4 portions).</li><li>Make a big pot of bolognese, etli nohut or lentil soup and freeze some.</li><li>Chop peppers, cucumber and carrots into boxes.</li><li>Make a jar of dressing (lemon, olive oil, mustard) and a bowl of cacık.</li></ol><p class="small" style="margin:0">Keeps 4 days in the fridge. Your lunches are then 5 minutes.</p></div>
+  <h2>Sunday meal prep (45 min)</h2><div class="card"><ol class="clean"><li>Bake 600 g chicken breast: 200°C for 18–20 min (see the tips below).</li><li>Cook 250 g dry quinoa (makes about 4 portions).</li><li>Make a big pot of bolognese, etli nohut or lentil soup and freeze some.</li><li>Chop peppers, cucumber and carrots into boxes.</li><li>Make a jar of dressing (lemon, olive oil, mustard).</li></ol><p class="small" style="margin:0">Keeps 4 days in the fridge. Your lunches are then 5 minutes.</p></div>
   <h2>Juicy chicken breast, every time</h2><div class="card"><ul class="clean"><li><b>Quick brine:</b> 15 min in water with 1 tbsp salt per litre. Pat dry.</li><li><b>Air fryer:</b> 200°C, 15–18 min, turn halfway. <b>Oven:</b> 200°C, 18–22 min.</li><li>Let it rest 5 min before cutting.</li><li><b>Marinades:</b> yogurt + lemon + garlic + paprika · olive oil + oregano + lemon · tomato paste + pul biber + cumin · soy sauce + honey + ginger (small amount).</li></ul></div>
   <h2>Your shopping list</h2><div class="card"><ul class="clean"><li><b>Protein:</b> chicken breast, salmon, 5% beef mince, eggs, firm tofu, skyr / Greek yogurt, cottage cheese, feta, protein powder</li><li><b>Legumes:</b> red and green lentils, canned chickpeas, hummus</li><li><b>Carbs:</b> quinoa, oats, wholegrain or rye bread, wholewheat pasta, potatoes, wraps</li><li><b>Vegetables:</b> spinach, peppers, tomatoes, cucumber, broccoli, courgette, onion, garlic, carrots</li><li><b>Fruit:</b> berries (frozen are fine), oranges, kiwis, bananas, lemons</li><li><b>Extras:</b> olive oil, tomato paste, cans of tomatoes, spices (cumin, paprika, pul biber, oregano), dark chocolate, almonds, chia</li></ul></div>
   <h2>Iron</h2><div class="card"><ul class="clean"><li>Eat lentils, chickpeas, tofu and spinach <b>with vitamin C</b>: peppers, tomato, orange, kiwi, lemon.</li><li>Keep <b>tea, coffee and dairy</b> 1–2 hours away from iron meals and your iron tablet.</li><li>Take the tablet with water or orange juice, e.g. mid-morning.</li><li>Have a beef meal during and right after your period.</li><li>Recheck ferritin with your doctor after about 3 months.</li></ul></div>
   <h2>Vitamin D</h2><div class="card"><ul class="clean"><li>Take it with a meal that has <b>some fat</b>, like dinner with salmon or olive oil.</li><li>Keep it at a different meal from your iron tablet.</li><li>Recheck after about 3 months.</li></ul></div>
   <h2>Around your cycle</h2><div class="card"><ul class="clean"><li><b>Period:</b> iron meals (bolognese, etli nohut, lentil salad). Warm soups help cramps.</li><li><b>Before your period:</b> hunger goes up, so add 100–150 kcal (yogurt + berries, a shake). Salty food makes bloating worse.</li><li><b>Cravings:</b> 2 squares of dark chocolate, a protein smoothie, or Greek yogurt with honey and cinnamon.</li></ul></div>
   <h2>Gym days</h2><div class="note good"><strong>Before:</strong> a meal with protein and carbs 1–3 hours earlier (e.g. overnight oats). <strong>After:</strong> 25–40 g protein (a shake or your next meal).</div>
-  <h2>Eating out</h2><div class="card"><ul class="clean"><li>Choose grilled chicken, köfte, salmon or a lentil dish.</li><li>Ask for sauce on the side, and swap rice or chips for salad or a small portion of bulgur/potatoes.</li><li>One meal out never ruins progress. Just go back to normal at the next meal.</li></ul></div>`;
+  <h2>Eating out</h2><div class="card"><ul class="clean"><li>Choose grilled chicken, salmon or a lentil dish.</li><li>Ask for sauce on the side, and swap rice or chips for salad or a small portion of bulgur/potatoes.</li><li>One meal out never ruins progress. Just go back to normal at the next meal.</li></ul></div>`;
 }
 
 
