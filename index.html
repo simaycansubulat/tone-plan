@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Glute &amp; Tone</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Tone">
+<meta name="theme-color" content="#ffffff">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap">
+<style>
+:root{
+  --bg:#ffffff; --soft:#f7f5f9; --fg:#1f1b24; --muted:#6a6372; --line:#e7e2ec;
+  --accent:#8a2f63; --accent-soft:#f6e9f0; --sage:#3f6b57; --sage-soft:#e8f2ec; --warn:#9a5b12; --warn-soft:#fdf3e4;
+  --display:"Space Grotesk",system-ui,-apple-system,sans-serif; --body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg)}
+body{color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.55;padding-top:env(safe-area-inset-top,0px);padding-bottom:calc(72px + env(safe-area-inset-bottom,0px))}
+.wrap{max-width:640px;margin:0 auto;padding:12px max(16px,env(safe-area-inset-right,0px)) 24px max(16px,env(safe-area-inset-left,0px))}
+h1,h2,h3{font-family:var(--display);line-height:1.2;margin:0}
+h1{font-size:1.5rem}
+h2{font-size:1.2rem;margin:22px 0 8px}
+h3{font-size:1rem;margin-bottom:6px}
+p{margin:0 0 10px}
+a{color:var(--accent)}
+button{font:inherit;cursor:pointer}
+input,select,textarea{font:inherit;font-size:16px;color:var(--fg)}
+ul.clean{padding-left:20px;margin:6px 0 10px} ul.clean li{margin-bottom:5px}
+/* bottom nav */
+nav.bar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:rgba(255,255,255,.97);border-top:1px solid var(--line);padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px));display:flex;justify-content:space-around;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+nav.bar a{flex:1;text-align:center;text-decoration:none;color:var(--muted);font-size:.7rem;font-weight:600;padding:4px 0;border-radius:10px}
+nav.bar a svg{display:block;margin:0 auto 2px;width:24px;height:24px}
+nav.bar a[aria-current="page"]{color:var(--accent)}
+/* header */
+.top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+.datenav{display:flex;align-items:center;gap:6px}
+.datenav button{border:1px solid var(--line);background:var(--bg);border-radius:10px;width:38px;height:38px;font-size:1.1rem;color:var(--fg)}
+.small{font-size:.82rem;color:var(--muted)}
+.pill{display:inline-block;font-size:.75rem;font-weight:600;padding:2px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
+.hero{background:var(--accent);color:#fff;border-radius:14px;padding:14px 16px}
+.hero h1{color:#fff}
+.hero .sub{opacity:.92;font-size:.92rem}
+.hero .cyc{margin-top:8px;background:rgba(255,255,255,.16);border-radius:8px;padding:7px 10px;font-size:.88rem}
+.progress{height:8px;background:rgba(255,255,255,.25);border-radius:99px;margin-top:10px;overflow:hidden}
+.progress i{display:block;height:100%;background:#fff;border-radius:99px;width:0}
+.note{border-radius:10px;padding:11px 13px;margin:10px 0;font-size:.92rem}
+.note.good{background:var(--sage-soft)} .note.good strong{color:var(--sage)}
+.note.warn{background:var(--warn-soft)} .note.warn strong{color:var(--warn)}
+.note.accent{background:var(--accent-soft)} .note.accent strong{color:var(--accent)}
+.note ul{margin:4px 0 0;padding-left:18px} .note li{margin-bottom:3px}
+.card{border:1px solid var(--line);border-radius:12px;padding:14px;margin-top:10px}
+.soft{background:var(--soft);border-radius:12px;padding:14px;margin-top:10px}
+.habits{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.chk{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;font-size:.9rem;min-height:44px}
+.chk input{width:22px;height:22px;accent-color:var(--accent);flex:none}
+.block{border:1px solid var(--line);border-radius:12px;margin-top:12px;overflow:hidden}
+.block-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--soft)}
+.block-h h3{margin:0}
+.block-h .t{font-size:.8rem;color:var(--muted)}
+.block.warm .block-h{background:var(--sage-soft)} .block.warm .block-h h3{color:var(--sage)}
+.ex{padding:12px 14px;border-bottom:1px solid var(--line)}
+.ex:last-child{border-bottom:none}
+.ex.isdone{background:#fbfaf5}
+.exhead{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.exhead .n{min-width:0;flex:1}
+.exhead strong{font-weight:600}
+.exhead .sr{font-family:var(--display);font-weight:600;white-space:nowrap;text-align:right}
+.exhead .rest{display:block;font-size:.78rem;color:var(--muted);font-weight:400;font-family:var(--body)}
+.works{display:block;font-size:.8rem;color:var(--sage);margin-top:2px}
+.ex small.s{display:block;color:var(--muted);font-size:.86rem;line-height:1.45;margin-top:2px}
+.start{display:block;font-size:.8rem;color:var(--accent);font-weight:600;margin-top:3px}
+.tip{display:block;font-size:.82rem;margin-top:4px;padding:4px 8px;border-radius:6px;background:var(--sage-soft);color:var(--sage)}
+.tag{display:inline-block;font-size:.62rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:1px 6px;border-radius:999px;margin-left:4px;vertical-align:2px}
+.tag.side{background:var(--accent-soft);color:var(--accent)}
+.tag.back{background:var(--sage-soft);color:var(--sage)}
+.last{font-size:.8rem;color:var(--muted);margin-top:6px}
+.up{font-size:.8rem;color:var(--sage);font-weight:600;margin-top:2px}
+.sets{display:grid;gap:6px;margin-top:8px}
+.setrow{display:grid;grid-template-columns:auto 52px 1fr 1fr;gap:8px;align-items:center}
+.setrow label.k{font-size:.8rem;color:var(--muted)}
+.setrow input[type=checkbox],.single input{width:26px;height:26px;accent-color:var(--accent)}
+.setrow input[type=number]{width:100%;min-width:0;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+.single{display:flex;align-items:center;gap:8px;margin-top:8px;font-size:.88rem;color:var(--muted)}
+details.how{margin-top:6px}
+details.how summary{cursor:pointer;font-size:.86rem;font-weight:600;color:var(--accent);list-style:none;padding:4px 0}
+details.how summary::-webkit-details-marker{display:none}
+details.how summary::before{content:"+ "}
+details.how[open] summary::before{content:"− "}
+.how ol{margin:6px 0;padding-left:20px;font-size:.9rem}
+.how .avoid{font-size:.86rem;margin:4px 0;padding:6px 10px;border-radius:8px;background:var(--warn-soft)}
+.how .avoid b{color:var(--warn)}
+.how .avoid ul{margin:2px 0 0;padding-left:18px}
+.vid{display:block;font-size:.88rem;font-weight:600;margin-top:4px}
+.btn{display:inline-block;background:var(--accent);color:#fff;border:0;border-radius:10px;padding:10px 14px;font-weight:600;text-decoration:none}
+.btn.ghost{background:var(--bg);color:var(--accent);border:1px solid var(--accent)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:end}
+.field{display:flex;flex-direction:column;gap:3px;font-size:.82rem;color:var(--muted);flex:1;min-width:90px}
+.field input{padding:9px;border:1px solid var(--line);border-radius:8px;background:var(--bg);width:100%}
+.list a,.list div.li{display:flex;justify-content:space-between;gap:10px;padding:11px 12px;border-bottom:1px solid var(--line);text-decoration:none;color:var(--fg)}
+.list{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:10px}
+.list a:last-child,.list div.li:last-child{border-bottom:none}
+.list b{font-family:var(--display)}
+.list .gym{color:var(--accent);font-weight:600}
+.tbl{width:100%;border-collapse:collapse;font-size:.85rem;font-variant-numeric:tabular-nums}
+.tbl th,.tbl td{padding:6px 4px;border-bottom:1px solid var(--line);text-align:right}
+.tbl th:first-child,.tbl td:first-child{text-align:left}
+.scroll{overflow-x:auto}
+.big{font-family:var(--display);font-size:2.4rem;font-weight:700;color:var(--accent);line-height:1}
+.phase{display:grid;grid-template-columns:86px 1fr;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:.92rem}
+.phase:last-child{border-bottom:none}
+.phase .w{font-family:var(--display);font-weight:600;color:var(--accent)}
+.phase.now{background:var(--accent-soft);border-radius:8px;padding:8px}
+.gloss{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.gloss div{background:var(--soft);border-radius:8px;padding:8px 10px;font-size:.88rem}
+.meal{display:grid;grid-template-columns:1fr auto;gap:2px 12px;padding:8px 0;border-bottom:1px dashed var(--line)}
+.meal:last-child{border-bottom:none}
+.meal .m{font-weight:600}
+.meal .k{color:var(--muted);font-size:.85rem;white-space:nowrap}
+.meal small{grid-column:1/-1;color:var(--muted);font-size:.86rem}
+.total{display:flex;justify-content:space-between;font-family:var(--display);font-weight:600;padding-top:8px}
+.vlist a{display:block;margin:6px 0;font-weight:600}
+[hidden]{display:none!important}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));background:var(--fg);color:#fff;padding:8px 14px;border-radius:10px;font-size:.88rem;z-index:30}
+</style>
+</head>
+<body>
+<main class="wrap" id="app"></main>
+<nav class="bar" aria-label="App sections">
+  <a href="#today" data-nav="today"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/></svg>Today</a>
+  <a href="#week" data-nav="week"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Plan</a>
+  <a href="#cycle" data-nav="cycle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16"/></svg>Cycle</a>
+  <a href="#me" data-nav="me"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>Me</a>
+  <a href="#food" data-nav="food"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 3v8a3 3 0 0 0 6 0V3M10 3v18M17 3c-2 2-2 6 0 8v10"/></svg>Food</a>
+</nav>
+<template id="foodtpl">
+    <h1>Food</h1>
+    <p><b>Eat 1,650–1,750 kcal and 100–115 g protein a day</b> to lose fat and keep your muscle. Expect about 0.25 kg a week. Your waist will shrink faster than the scale.</p>
+    <div class="card"><h3>My protein foods</h3><ul class="clean">
+      <li>Chicken breast (air fryer, 15–18 min)</li>
+      <li>Salmon, including smoked</li>
+      <li>Lean ground beef, 2–3× a week, for iron</li>
+      <li>Eggs: scrambled, omelette, shakshuka</li>
+      <li>Lentils and chickpeas</li>
+      <li>Tofu</li>
+      <li>Skyr, Greek yogurt, cottage cheese</li>
+      <li>Protein powder (1 scoop ≈ 25 g)</li>
+    </ul></div>
+    <div class="card"><h3>Sample day</h3>
+      <div class="meal"><span class="m">Breakfast</span><span class="k">29 g · 420</span><small>Skyr + oats + berries + peanut butter</small></div>
+      <div class="meal"><span class="m">Lunch</span><span class="k">40 g · 550</span><small>Quinoa bowl: chicken breast, chickpeas, spinach, peppers, lemon</small></div>
+      <div class="meal"><span class="m">Snack</span><span class="k">25 g · 200</span><small>Protein shake + an orange</small></div>
+      <div class="meal"><span class="m">Dinner</span><span class="k">30 g · 550</span><small>Salmon, quinoa, roasted vegetables, plus your vitamin D tablet</small></div>
+      <div class="total"><span>Total</span><span>~124 g · ~1,720 kcal</span></div>
+    </div>
+    <div class="card"><h3>Dinner ideas (no rice)</h3><ul class="clean">
+      <li>Beef and lentil bolognese, the best iron meal</li>
+      <li>Salmon with quinoa and vegetables</li>
+      <li>Chickpea and tofu curry with spinach, on quinoa</li>
+      <li>Red lentil soup with chicken breast or an omelette</li>
+      <li>Chicken breast fajita bowl on quinoa</li>
+    </ul></div>
+    <div class="card"><h3>Iron</h3><ul class="clean">
+      <li>Eat lentils, chickpeas, tofu and spinach <b>with vitamin C</b> (peppers, orange, lemon, tomato).</li>
+      <li>Keep <b>tea, coffee and dairy</b> 1–2 h away from iron meals and your iron tablet.</li>
+      <li>Take the tablet with water or orange juice, e.g. mid-morning.</li>
+      <li>Eat a beef meal during and right after your period.</li>
+      <li>Recheck your ferritin after about 3 months.</li>
+    </ul></div>
+    <div class="card"><h3>Vitamin D</h3><ul class="clean">
+      <li>Take it with a meal that has <b>some fat</b>, like dinner.</li>
+      <li>Keep it at a different meal from your iron tablet.</li>
+      <li>Recheck it after about 3 months.</li>
+    </ul></div>
+    <div class="note good"><strong>Gym days:</strong> eat a meal with protein and carbs 1–3 hours before, and get 25–40 g of protein afterwards. A shake is easiest.</div>
+  </template>
+<script>
+const EX = {
+  walk:{n:"Incline treadmill walk or bike",s:"Easy pace. You should be able to talk.",how:["Treadmill: set a 5–8% incline and 4.5–5.5 km/h. Bike: use easy resistance.","Walk without holding the handrails.","You should be able to talk the whole time. This just warms you up."],q:"incline treadmill walk warm up"},
+  catcow:{n:"Cat–cow",s:"Slow, moving one vertebra at a time.",how:["Get on all fours: hands under shoulders, knees under hips.","Breathe in: let your belly drop and lift your chest and tailbone (cow).","Breathe out: round your back up toward the ceiling and tuck your chin (cat).","Move slowly, one vertebra at a time."],avoid:["Forcing the arch in your lower back. Stay in a comfortable range."],q:"cat cow exercise"},
+  childs:{n:"Cat–cow + child's pose",s:"8 slow cat–cows, then 30 seconds in child's pose.",how:["Do 8 slow cat–cows: on all fours, arch gently while breathing in, then round your back while breathing out.","Sit your hips back onto your heels, knees a little apart, arms reaching forward on the floor.","Breathe slowly into your lower back for 30 seconds."],q:"child's pose beginner"},
+  n9090:{n:"90/90 hip switches",s:"Rotate both knees from side to side, chest tall.",how:["Sit on the floor with both knees bent at 90°: one leg in front of you, the other to the side and behind you.","Lean back on your hands if you need to.","Lift both knees and rotate them to the other side, so the legs swap positions.","Keep your chest tall and move slowly."],avoid:["Rushing or bouncing."],q:"90 90 hip switch mobility"},
+  cars:{n:"Standing hip circles (hip CARs)",s:"Big, slow circles in both directions.",how:["Stand tall and hold onto a wall or rack with one hand.","Lift one knee up in front of you.","Slowly move the knee out to the side, then rotate it back and down, drawing the biggest circle you can.","Do the reps, then reverse the direction."],avoid:["Leaning or twisting your upper body. Only the leg moves."],q:"standing hip CARs"},
+  openbook:{n:"Open-book rotation",s:"Opens the upper back before rows.",how:["Lie on your side with knees bent to 90° and stacked, arms straight in front of you, palms together.","Keep your knees on the floor the whole time.","Lift the top arm and open it across to the floor behind you, following your hand with your eyes.","Breathe out, pause, then bring it back."],avoid:["Letting your knees lift off the floor."],q:"open book stretch thoracic rotation"},
+  bridge:{n:"Glute bridge (bodyweight)",s:"Squeeze 2–3 seconds at the top, with ribs down.",how:["Lie on your back with knees bent, feet flat and hip-width apart, about a hand-length from your glutes.","Gently flatten your lower back and tighten your belly.","Push through your heels and lift your hips until your body is straight from knees to shoulders.","Squeeze your glutes at the top, then lower slowly."],avoid:["Arching your lower back at the top. Your ribs stay down.","Pushing through your toes."],q:"glute bridge proper form"},
+  legswing:{n:"Leg swings",s:"Hold onto a wall and gradually make the swings bigger.",how:["Front–back: stand side-on to a wall and hold it with one hand, then swing the outside leg forward and back like a pendulum.","Side–side: face the wall, hold it with both hands, and swing one leg across your body and out to the side.","Keep the leg relaxed. Start small and make the swings bigger each rep."],avoid:["Kicking hard or arching your back."],q:"leg swings warm up"},
+  hinge:{n:"Hip hinge with a stick",s:"Teaches the Romanian deadlift pattern and protects your back.",how:["Hold a broomstick or gym dowel along your back: one hand behind your neck, the other at your lower back.","The stick should touch your head, upper back and tailbone.","Soften your knees and push your hips straight back, letting your chest tip forward.","Go until you feel a stretch in the back of your thighs, then stand up by pushing your hips forward."],avoid:["Losing contact at any of the three points, which means your back is rounding or arching."],q:"hip hinge dowel drill"},
+  rockback:{n:"Adductor rock-back",s:"Opens the inner thighs.",how:["Get on all fours and straighten one leg out to the side, foot flat on the floor.","Keep your back flat.","Push your hips back toward your heels until you feel a stretch in the inner thigh.","Come forward again."],avoid:["Rounding your lower back at the end."],q:"adductor rock back"},
+  wallslide:{n:"Wall slides + arm circles",s:"Prepares the shoulders for pressing.",how:["Stand with your head, upper back and glutes against a wall, feet a little in front.","Put your arms on the wall in a \"W\" shape, elbows bent.","Slide your arms up into a \"Y\" while they stay touching the wall, then back to \"W\".","Then do 10 arm circles forward and 10 backward."],avoid:["Arching your lower back off the wall."],q:"wall slides exercise shoulder"},
+  clamshell:{n:"Clamshell",tag:["side","hip-dip area"],s:"Side glutes with the least TFL. No band needed.",how:["Lie on your side, head resting on your lower arm, hips and knees bent at about 45°, feet together and in line with your body.","Roll your top hip slightly forward so the hips stay stacked.","Keeping your feet together, lift the top knee as high as you can without your hips rolling back.","Pause 1 second, then lower slowly.","When bodyweight is easy, rest a light dumbbell or plate on the outside of your top knee."],avoid:["Rolling your hips backward to lift higher.","Rushing. Slow reps work better."],q:"clamshell exercise proper form"},
+  deadbug:{n:"Dead bug",tag:["back","back-safe"],s:"Flat belly, safe for the lower back.",how:["Lie on your back with arms pointing to the ceiling and knees bent at 90° above your hips.","Gently press your lower back into the floor.","Breathe out and slowly lower your right arm overhead and your left leg toward the floor at the same time.","Go only as far as you can while your lower back stays down, then return and switch sides."],avoid:["Your lower back lifting off the floor. If it does, make the movement smaller."],q:"dead bug exercise proper form"},
+  donkey:{n:"Donkey kick, knee bent",tag:["side","hip-dip area"],s:"Glutes with very little TFL.",how:["Get on all fours, hands under shoulders, knees under hips.","Tighten your belly so your back stays flat.","Keeping the knee bent at 90°, push the sole of your foot up toward the ceiling.","Stop when your thigh is in line with your body. Squeeze the glute for 1 second, then lower."],avoid:["Arching your lower back to kick higher.","Twisting your hip open to the side."],q:"donkey kick exercise proper form"},
+  birddog:{n:"Bird dog",tag:["back","back-safe"],s:"A key exercise for the lower back.",how:["Get on all fours, hands under shoulders, knees under hips, back flat.","Tighten your belly.","Slowly reach your right arm forward and your left leg back until both are straight and level with your body.","Hold 5 seconds, return, and switch sides."],avoid:["Lifting the leg too high so your back arches.","Rotating your hips. Imagine a glass of water balanced on your lower back."],q:"bird dog exercise mcgill"},
+  sideplank:{n:"Side plank",s:"Start on your knees if you need to.",how:["Lie on your side with your elbow directly under your shoulder.","Beginner version: knees bent and on the floor. Full version: legs straight, feet stacked.","Lift your hips until your body is in a straight line from head to knees (or feet).","Hold while breathing normally."],avoid:["Letting your hips sag or pushing them back.","If it hurts your lower back like the front plank did, skip it and do an extra set of bird dogs instead."],q:"side plank on knees beginner"},
+  curlup:{n:"McGill curl-up",tag:["back","back-safe"],s:"A safe replacement for crunches.",how:["Lie on your back with one knee bent and the other leg straight.","Slide your hands, palms down, under the natural curve of your lower back. Don't flatten the curve.","Tighten your belly and lift only your head and shoulders a few centimetres, keeping your neck still.","Hold 10 seconds, then lower. Switch the bent leg halfway through your reps."],avoid:["Pulling on your neck or tucking your chin to your chest.","Curling up high like a sit-up."],q:"mcgill curl up"},
+  plank:{n:"Forearm plank",tag:["back","back-safe"],s:"Strengthens the whole belly without twisting.",how:["Forearms on the floor, elbows directly under your shoulders.","Beginner version: knees on the floor. Full version: on your toes, feet hip-width apart.","Squeeze your glutes and tuck your tailbone slightly so your body makes one straight line.","Hold while breathing normally."],avoid:["Letting your hips sag, which strains the lower back.","Lifting your hips high."],q:"forearm plank beginner"},
+  yraise:{n:"Incline prone Y-raise",s:"For posture and a lightly toned upper back. Very light.",start:"Start: no weight, then 1–2 kg",how:["Set a bench to 30–45°. Lie face down with your chest on the pad and your toes on the floor.","Let your arms hang down, thumbs pointing up.","Raise your arms forward and out in a \"Y\" shape until they're level with your head, squeezing between your shoulder blades.","Pause 1 second, then lower slowly."],avoid:["Shrugging toward your ears.","Lifting your chest off the pad."],q:"incline prone Y raise"},
+  chestpress:{n:"Chest press machine (light)",s:"Tones the chest for a lifted look. Kept light, so it won't add bulk.",start:"Start: 10–15 kg",how:["Adjust the seat so the handles line up with the middle of your chest.","Sit with your back flat against the pad and your feet flat on the floor.","Press the handles forward until your arms are almost straight, without locking your elbows.","Return slowly until you feel a light stretch across your chest."],avoid:["Shoulders rolling forward or shrugging up.","Arching your back off the pad."],q:"seated chest press machine"},
+  wallhinge:{n:"Wall hip hinge drill",s:"Teaches the Romanian deadlift movement. No stick needed.",how:["Stand with your back to a wall, heels about 25–30 cm away from it.","Hands on your hips, knees soft, back flat.","Push your hips straight back until your glutes touch the wall, letting your chest tip forward.","Stand up by pushing your hips forward. When it feels easy, move your feet a little further from the wall."],avoid:["Bending your knees a lot, which turns it into a squat.","Rounding your back."],q:"wall hip hinge drill"},
+  inclinepress:{n:"Incline dumbbell press",s:"Tones the chest and the back of the arms.",start:"Start: 4–6 kg per hand",how:["Set a bench to about 30° (usually the second or third notch).","Sit with the dumbbells on your thighs, lie back, and bring them up beside your chest.","Squeeze your shoulder blades together, feet flat on the floor.","Press the dumbbells up until your arms are straight, then lower slowly to chest level, elbows about 45° from your body."],avoid:["Flaring your elbows straight out to the sides.","Arching your lower back off the bench."],q:"incline dumbbell press proper form"},
+  lateral:{n:"Dumbbell lateral raise",s:"Slightly rounder shoulders make your waist look smaller.",start:"Start: 2–3 kg",how:["Stand tall with a light dumbbell in each hand at your sides, elbows slightly bent.","Raise your arms out to the sides until they reach shoulder height, thumbs pointing slightly down.","Lower slowly over 2–3 seconds."],avoid:["Swinging the weights or shrugging your shoulders up.","Going heavy. Light and controlled is right."],q:"dumbbell lateral raise proper form"},
+  csrow:{n:"Chest-supported dumbbell row",tag:["back","back-safe"],s:"The bench takes the load off your lower back.",start:"Start: 5–7 kg per hand",how:["Set a bench to 30–45° and lie face down on it, chest on the pad, toes on the floor.","Let a dumbbell hang straight down from each hand.","Pull the dumbbells up toward your lower ribs with elbows slightly out, squeezing your shoulder blades together.","Lower slowly until your arms are straight."],avoid:["Lifting your chest off the pad.","Shrugging your shoulders toward your ears."],q:"chest supported dumbbell row incline bench"},
+  ohtri:{n:"Dumbbell overhead triceps extension",s:"Tones the back of the upper arms.",start:"Start: 4–5 kg",how:["Sit on a bench with the backrest upright and your back against it.","Hold one dumbbell with both hands under the top plate, arms straight overhead.","Keep your elbows pointing forward and close to your head, then lower the dumbbell behind your head.","Straighten your arms to lift it back up."],avoid:["Letting your elbows flare wide.","Arching your lower back away from the pad."],q:"seated overhead dumbbell triceps extension"},
+  htm:{n:"Hip thrust machine",tag:["back","back-safe"],s:"Your main glute builder.",start:"Start: 20 kg (empty machine)",how:["Sit in the machine with your back against the pad, so the pad edge is just under your shoulder blades.","Fasten the belt or pad across your hip bones, not your stomach.","Feet flat and hip-width apart. At the top your shins should be vertical, so move your feet if they aren't.","Tuck your chin and look forward, not up at the ceiling.","Push through your heels and lift your hips until your body is straight from knees to shoulders. Squeeze your glutes for 1 second.","Lower slowly until your hips are just above the floor. Do 1 warm-up set of 10 with the empty machine first."],avoid:["Arching your lower back at the top. Lock out with your glutes and keep your ribs down.","Pushing through your toes, which shifts the work to your thighs."],q:"hip thrust machine proper form"},
+  slht:{n:"Single-leg hip thrust on the machine",tag:["side","hip-dip area"],s:"One-leg glute work targets the gluteus medius.",start:"Start: 20 kg (empty machine)",how:["Set up exactly as for the hip thrust machine.","Pull one knee up toward your chest and keep it there.","Push through the heel of the planted foot, letting that knee drift slightly outward as you lift.","Squeeze at the top for 1 second, lower slowly. Do all reps, then switch sides."],avoid:["Letting your hips tilt to one side. Keep them level."],q:"single leg hip thrust machine"},
+  bstance:{n:"B-stance hip thrust on the machine",s:"Mostly one-sided, but more stable than single-leg.",start:"Start: 20 kg (empty machine)",how:["Set up as for the hip thrust machine.","Move one foot forward about one foot-length so it rests on its heel with the toes up. That foot only helps a little.","Drive up mainly through the heel of the other foot, which does about 70–80% of the work.","Squeeze 1 second, lower slowly. Do all reps on one side, then switch."],avoid:["Pushing hard through the front foot."],q:"b stance hip thrust"},
+  legcurl:{n:"Seated or lying leg curl",s:"Firms the back of the thighs, where your cellulite is.",start:"Start: 10–15 kg",how:["Adjust the machine so your knees line up with its pivot point, usually marked with a coloured dot.","Seated: the leg pad sits just above your heels, and the thigh pad holds your legs down firmly. Lying: lie face down with the pad just above your heels.","Curl your heels toward your glutes in one smooth movement.","Take 3 seconds to lower back to the start."],avoid:["Lifting your hips off the pad (lying version).","Letting the weight drop fast."],q:"seated leg curl proper form"},
+  kickback:{n:"Glute kickback (cable or kickback machine)",tag:["side","hip-dip area"],s:"Use the adjustable pulley on the Matrix multi-station, set at the bottom, with an ankle strap. Or use the older machine where you push a pad backward with your leg. It's the same movement. Keep your toes pointing down.",start:"Start: 2.5–5 kg (cable) or the lightest setting (machine)",how:["Cable: attach an ankle strap to the low pulley and put it around one ankle. Face the machine and hold it with both hands.","Kickback machine: stand (or kneel, depending on the machine) with the pad behind your ankle or the back of your knee, and hold the handles.","Lean forward slightly with a small bend in the standing knee. Point your toes down and tighten your belly.","Push the leg straight back, squeezing the glute, until the leg is just behind your body.","Return slowly. Do all reps on one side, then switch."],avoid:["Arching your lower back to kick higher.","Turning your toes out.","Using that old machine to push the leg <b>out to the side</b>. That's abduction, which builds the TFL. Only push backward.","Swinging. Every rep is slow and controlled."],q:"cable glute kickback proper form"},
+  cablerow:{n:"Seated cable row, wide grip",s:"Mid-back for posture, not width.",start:"Start: 15–20 kg",how:["Sit at the row station with your feet on the platform and knees slightly bent.","Hold a wide bar or wide handles and sit tall, chest up.","Pull the bar to your lower chest with your elbows out about 60° from your body.","Squeeze your shoulder blades together, then let your arms straighten slowly."],avoid:["Leaning far back or rounding forward. Your upper body stays almost still.","Shrugging your shoulders."],q:"wide grip seated cable row form"},
+  fig4:{n:"Lying figure-4 glute stretch",s:"Relaxes the glutes after training. Gentle on the back.",how:["Lie on your back with both knees bent and feet flat.","Cross your right ankle over your left knee, making a \"4\".","Hold behind your left thigh and gently pull it toward your chest until you feel a stretch in the right glute.","Breathe slowly for 30–45 seconds, then switch sides."],avoid:["Lifting your head or shoulders. Keep them relaxed on the floor."],q:"lying figure 4 stretch"},
+  supham:{n:"Lying hamstring stretch with a towel",s:"Stretches the back of the thighs while your back stays safe on the floor.",how:["Lie on your back and loop a towel around one foot.","Straighten that leg up toward the ceiling. Keep the other knee bent with the foot on the floor.","Gently pull with the towel until you feel a stretch behind the thigh.","Hold 30–45 seconds, breathing slowly, then switch."],avoid:["Lifting your hips off the floor.","Pulling hard. The stretch should feel mild."],q:"lying hamstring stretch towel"},
+  kneechest:{n:"Knee-to-chest stretch",s:"Gently releases the lower back.",how:["Lie on your back with your knees bent.","Bring both knees toward your chest and hold behind your thighs.","Rock gently from side to side, or just breathe and relax for 30 seconds."],q:"knee to chest stretch lower back"},
+  sidechild:{n:"Child's pose with side reach",s:"Stretches the sides of the back (lats) after pulling.",how:["Kneel and sit your hips back toward your heels, arms reaching forward.","Walk both hands over to the right until you feel a stretch along your left side.","Breathe there for 20–30 seconds, then walk the hands to the left."],avoid:["Forcing your hips onto your heels if your knees complain. Put a cushion between them."],q:"child's pose side reach lat stretch"},
+  closerow:{n:"Seated cable row, close grip",s:"Mid-back and posture. Done on the low-row station of the Matrix multi-station.",start:"Start: 15–20 kg",how:["Sit at the low-row station with your feet on the platform and knees slightly bent.","Use the close V-handle (palms facing each other). Sit tall with your chest up.","Pull the handle to your belly button, keeping your elbows close to your body.","Squeeze your shoulder blades together and down, then let your arms straighten slowly."],avoid:["Leaning back to pull, or rounding forward on the way back.","Shrugging your shoulders."],q:"seated cable row close grip"},
+  chintuck:{n:"Chin tuck",s:"Fixes a forward head (\"tech neck\").",how:["Sit or stand tall, or stand with your back against a wall.","Look straight ahead and gently slide your head straight back, as if making a double chin. Don't tip it down.","Hold 3–5 seconds, feeling a stretch at the base of your skull, then relax."],avoid:["Tilting your head down or up.","Forcing it. It's a small, gentle movement."],q:"chin tuck exercise posture"},
+  doorway:{n:"Doorway chest stretch",s:"Opens tight chest muscles that pull your shoulders forward.",how:["Stand in a doorway and put your forearm on the door frame, elbow at shoulder height.","Step forward with the leg on the same side until you feel a stretch across the chest and the front of the shoulder.","Keep your shoulder blade back and your belly lightly tight. Breathe slowly.","Hold 30 seconds, then switch sides."],avoid:["Leaning so far that it pinches the shoulder.","Any numbness or tingling in the arm. If it happens, ease off."],q:"doorway pec stretch"},
+  facepull:{n:"Face pull",s:"Rear shoulders and posture. Use the adjustable pulley on the Matrix multi-station with a rope. Ask the staff for the rope attachment.",start:"Start: 5–10 kg",how:["Set the adjustable pulley at about forehead height and attach a rope.","Hold the rope with thumbs pointing back toward you and step back until your arms are straight.","Pull the rope toward your eyes with elbows high, spreading the ends apart.","Squeeze the backs of your shoulders, then return slowly."],avoid:["Leaning back to pull.","Going heavy. Keep it light and controlled."],q:"face pull proper form"},
+  pallof:{n:"Pallof press",s:"Keeps the waist flat and strong.",start:"Start: 5 kg",how:["Set a cable handle at chest height and stand sideways to the machine.","Step away until the cable is tight, with feet hip-width and knees soft.","Hold the handle with both hands at the middle of your chest.","Press it straight out and hold 2 seconds without letting it twist you, then bring it back.","Do all reps facing one way, then turn around."],avoid:["Letting your body twist toward the machine."],q:"pallof press cable"},
+  smithrdl:{n:"Smith machine Romanian deadlift",s:"Back of thighs and lower glutes. The fixed bar is gentler on the back.",start:"Start: 20 kg (empty Smith bar)",how:["Set the bar hooks at about mid-thigh height. Stand facing the bar with feet hip-width, close to it.","Grip the bar just outside your thighs, rotate your wrists to unhook it, and stand tall.","Soften your knees slightly and keep them at that angle the whole time.","Push your hips straight back while the bar slides down close to your thighs. Your back stays flat and your chest stays proud.","Stop when you feel a strong stretch in your hamstrings, usually around the knees or mid-shin.","Stand up by pushing your hips forward and squeezing your glutes. Re-hook the bar at the end."],avoid:["Rounding your back to go lower.","Bending your knees more as you go down. That turns it into a squat.","Leaning back at the top.","If your back complains, swap it for a cable pull-through that day."],q:"smith machine romanian deadlift form"},
+  backext:{n:"45° back extension, glute version",tag:["back","builds the lower back"],s:"Strengthens the lower back gently while working the glutes.",start:"Start: bodyweight (weeks 1–4)",how:["Adjust the pad so it sits just below your hip bones, so you can bend freely at the hips.","Turn your feet out about 45° on the footplate, heels against the back pad.","Cross your arms over your chest, round your upper back slightly and tuck your chin.","Lower your upper body forward.","Lift by squeezing your glutes until your body is in a straight line, and stop there."],avoid:["Leaning back past straight, which arches the lower back.","Lifting with your lower back instead of your glutes."],q:"45 degree back extension glute focused"},
+  pullthrough:{n:"Cable pull-through",tag:["back","back-safe"],s:"Hip hinge with very little load on the spine.",start:"Start: 10–15 kg",how:["Attach a rope to the low pulley. Face away from the machine, reach between your legs and grab the rope.","Walk forward 2–3 steps, feet a little wider than hip-width.","Soften your knees and push your hips back, letting the rope pull your hands back between your legs. Your back stays flat.","Snap your hips forward and squeeze your glutes to stand tall."],avoid:["Squatting down. This is a hip hinge.","Pulling with your arms. They just hold on."],q:"cable pull through glutes form"},
+  pulldown:{n:"Lat pulldown, close neutral grip",s:"Strength and posture, with low volume so it doesn't add width.",start:"Start: 20–25 kg",how:["Attach a close-grip V handle, so your palms face each other.","Sit with your thighs under the pad and lean back very slightly.","Pull the handle to your upper chest, driving your elbows down toward your back pockets.","Let it rise slowly until your arms are straight."],avoid:["Leaning far back or swinging.","Pulling the bar behind your neck."],q:"close grip lat pulldown v bar form"},
+  pushdown:{n:"Cable triceps pushdown",s:"Light weight for slim, toned arms.",start:"Start: 7.5–10 kg",how:["Attach a rope or short bar to the high pulley.","Stand close with your elbows pinned at your sides and a slight forward lean.","Push down until your arms are fully straight, then let your forearms rise slowly to about 90°."],avoid:["Elbows moving forward or out.","Using your body weight to push."],q:"cable triceps pushdown rope form"},
+  hipflexor:{n:"Kneeling hip flexor stretch",s:"Tuck your tailbone and squeeze the back glute.",how:["Kneel on one knee, padded with a cushion, with the other foot flat in front.","Tuck your tailbone under and squeeze the glute of the back leg.","Shift your hips forward slowly until you feel a stretch at the front of the back hip."],avoid:["Arching your lower back."],q:"kneeling hip flexor stretch posterior pelvic tilt"},
+  halfsplit:{n:"Half split (hamstring)",s:"Hips over the back knee, back flat.",how:["Kneel, then straighten your front leg with the heel on the floor and toes up.","Keep your hips stacked over the back knee.","Keep your back flat and fold forward from the hips, hands on blocks or books."],avoid:["Rounding your back to reach further."],q:"half split stretch"},
+  lizard:{n:"Lizard pose",s:"Let your hips sink.",how:["Start in a lunge with your back knee on the floor.","Put both hands on the floor inside your front foot.","Let your hips sink toward the floor. Lower onto your forearms if it's comfortable."],q:"lizard pose"},
+  pigeon:{n:"Pigeon",s:"Hips square. Put a pillow under the hip if needed.",how:["From all fours, bring one knee forward behind your wrist, with the shin angled across.","Slide the other leg straight back.","Keep your hips square and put a cushion under the front hip if it doesn't reach the floor."],avoid:["Any pain in the front knee. If it hurts, bring that foot closer to your hip."],q:"pigeon pose beginner"},
+  pnf:{n:"Contract–relax half split",s:"Stretch, press, relax, sink deeper.",how:["Get into the half split and stretch for 20 seconds.","Press the front heel down into the floor at about 70% effort for 6 seconds, without moving.","Relax, breathe out and sink a little deeper for 20 seconds. That's one round."],q:"pnf hamstring stretch contract relax"},
+  splitslide:{n:"Split slides on blocks",s:"Only to 6–7 out of 10 stretch.",how:["Wear socks on a smooth floor, or put a towel under the front heel.","Kneel in a lunge with a yoga block or a pile of books under each hand.","Slowly slide the front heel forward and the back knee back.","Stop when the stretch feels like 6–7 out of 10. Keep your hips square, tailbone tucked, and breathe."],avoid:["Forcing it or bouncing."],q:"front split progression yoga blocks beginner"},
+  lungerock:{n:"Lunge rocks + cat–cow",s:"Rock gently in and out of a deep lunge.",how:["Step into a deep lunge with your back knee down.","Gently rock your hips forward and back.","Finish with 8 slow cat–cows."],q:"lunge rock hip flexor warm up"},
+  frog:{n:"Frog stretch",s:"Knees wide, shins parallel.",how:["Get on all fours on a soft surface and slide your knees wide apart.","Turn your feet out so your shins are parallel and your ankles line up with your knees.","Rest on your forearms and slowly rock your hips back."],q:"frog stretch beginner"},
+  pancake:{n:"Straddle fold (pancake)",s:"Fold from the hips, not by rounding your back.",how:["Sit on a cushion with your legs wide apart, toes up.","Keep your back long and walk your hands forward, folding from the hips."],avoid:["Rounding your back to reach further."],q:"pancake stretch beginner"}
+};
+
+const WORKS = {
+  walk:"Heart and lungs; warms up the whole body",catcow:"Spine mobility",childs:"Lower back and hips (relaxing stretch)",n9090:"Hip rotation mobility",cars:"Hip joint mobility in every direction",openbook:"Upper-back mobility",bridge:"Glute max (wakes it up)",legswing:"Hamstrings and hip flexors (dynamic stretch)",wallhinge:"Movement practice; stretches hamstrings, wakes up glute max",rockback:"Inner thighs (adductors)",wallslide:"Shoulder-blade muscles and posture",
+  clamshell:"Gluteus medius and minimus (side glutes, over the hip dip)",deadbug:"Deep abs (transverse abdominis) and lower abs",plank:"Whole core: deep abs and front abs (rectus abdominis)",donkey:"Glute max (main), back part of gluteus medius",birddog:"Lower-back muscles (erector spinae), glutes, deep abs",sideplank:"Side abs (obliques), deep lower-back muscle (quadratus lumborum), gluteus medius",curlup:"Front abs (rectus abdominis) without stressing the back",
+  yraise:"Lower and middle trapezius, rear shoulders (posture)",csrow:"Mid-back (rhomboids, middle trapezius), rear shoulders",ohtri:"Triceps (back of the upper arm)",chestpress:"Chest (pectorals), with some triceps",
+  htm:"Glute max (main); some hamstrings and gluteus medius",slht:"Glute max and gluteus medius (side glutes)",bstance:"Glute max one side at a time; gluteus medius",legcurl:"Hamstrings (back of the thighs)",kickback:"Glute max, especially the upper part",cablerow:"Mid-back (rhomboids, middle trapezius), rear shoulders",smithrdl:"Hamstrings and glute max (lower glutes); lower-back muscles hold the position",backext:"Glute max and hamstrings; gently strengthens the lower-back muscles",pullthrough:"Glute max and hamstrings",pulldown:"Lats and mid-back; arms assist",pushdown:"Triceps (back of the upper arm)",
+  fig4:"Glutes and deep hip rotators (stretch)",supham:"Hamstrings (stretch)",kneechest:"Lower back (gentle release)",sidechild:"Lats and sides of the back (stretch)",
+  facepull:"Rear shoulders, middle and lower trapezius, rotator cuff (posture)",closerow:"Mid-back (rhomboids, middle trapezius), lats; arms assist",chintuck:"Deep neck flexors (head posture)",doorway:"Chest (pectorals) and front shoulders, stretched",
+  hipflexor:"Hip flexors (iliopsoas, rectus femoris)",halfsplit:"Hamstrings",lizard:"Hip flexors and inner hips",pigeon:"Outer glutes and deep hip rotators",pnf:"Hamstrings",splitslide:"Front-leg hamstrings and back-leg hip flexors",lungerock:"Hip flexors",frog:"Inner thighs (adductors)",pancake:"Inner thighs and hamstrings"
+};
+
+EX.easywalk={n:"Easy walk outside",s:"30–40 minutes at a relaxed pace. It counts toward your steps and helps recovery.",how:["Walk at a pace where you can easily talk.","Stand tall: shoulders relaxed and down, eyes forward, not on your phone."],q:""};
+WORKS.easywalk="Heart and lungs; gentle recovery for legs and back";
+
+const YT=(id,l)=>({u:"https://www.youtube.com/watch?v="+id,l:"Watch the video · "+l});
+const VIDEOS={
+  walk:[YT("Ii71nAaRc_8","Vivian Ngo")],catcow:[YT("y39PrKY_4JM","Yoga With Adriene")],childs:[YT("1Awbr8FfrWE","Di Hickman")],
+  n9090:[YT("QKbI1KCEXFQ","Amanda Capritto")],cars:[YT("C6v00bJWA7o","Move with Marcia")],openbook:[YT("OW6YHlxY6JI","Cheryl Obregon, physical therapist")],
+  bridge:[YT("ytvP0oUDKYw","Doctor Jo, physical therapist")],legswing:[YT("BwsqxJxk7cM","Cassie Nobbs")],wallhinge:[YT("PT4wLj2dbTM","Get Strong with Emily")],
+  rockback:[YT("8FhPrK0QjhE","Core Fitness for Moms (adds a small rotation at the end)")],
+  clamshell:[YT("2c5xiz4q7ow","Margaret Martin, physical therapist")],deadbug:[YT("e2A_P1-Nw48","Helen, Pilates physiotherapist")],
+  donkey:[YT("SJ1Xuz9D-ZQ","LivestrongWoman")],birddog:[YT("LaLKNS7mxrk","Margaret Martin, physical therapist")],
+  sideplank:[YT("9dNL_mtObGQ","Doctor Jo, physical therapist (start with the on-knees version)")],curlup:[YT("z3-FLG89vCg","Michelle Kenway, physical therapist (gentle version)")],
+  doorway:[YT("NePr1XKRTLU","Doctor Jo, physical therapist")],sidechild:[YT("jig8uj3xHN0","Loretta Hogg")],
+  chintuck:[YT("7rnlAVhAK-8","Doctor Jo, physical therapist")],fig4:[YT("2VE_NLcNMvQ","Doctor Jo, physical therapist")],
+  supham:[YT("Il1L75v6gq0","Doctor Jo, physical therapist")],kneechest:[YT("5R7eWaNWO3U","Doctor Jo, physical therapist")],
+  facepull:[YT("WK_xe1HYASQ","Bruna Rocha (no English needed, easy to follow)")],
+  htm:[YT("UlljOYPM57U","Lauren Allen"),YT("BiuADRUAyBU","Naomi Kong, beginner's guide")],bstance:[YT("Ot8l427nWIY","Molly, Die Tryin Company")],pushdown:[YT("nMqQNGo4Jtg","Naomi Kong")],
+  kickback:[YT("8UzzL5thzRg","cable version, do's and don'ts · Cheyenne Trevatt"),YT("t216WJhIWfc","kickback machine version · Funsized")],
+  slht:[YT("xizbNw9IrjE","Vera Armishaw")],legcurl:[YT("J8YOf3XTrwA","Laci Renee")],cablerow:[YT("uZ0r6iYcLwo","Holly Perkins")],closerow:[YT("uZ0r6iYcLwo","Holly Perkins")],
+  smithrdl:[YT("pwGLw2xJCGw","Naomi Kong")],pullthrough:[YT("IU-ERkjTKXA","Mia Dales")],pulldown:[YT("j9jtjL8FhPI","Erin Stern")],chestpress:[YT("NUjuGsJncM8","Workout With Her (short clip)")],
+  hipflexor:[YT("tsGPYSQbZx4","Doctor Jo, physical therapist")],halfsplit:[YT("h_wtmUMu0MU","YanvaYoga")],lizard:[YT("-6MGjYmHdYQ","Yoga With Adriene")],
+  pigeon:[YT("zuYbjkuKLKY","Brett Larkin Yoga")],pnf:[YT("JRQBmPRHSYk","Dani Winks")],splitslide:[YT("LSol0FJdhiI","ivyworksout")],
+  lungerock:[YT("We112xrlUbk","Lauren McMillin")],frog:[YT("2q1h8005t5k","Zen with Xenia")],pancake:[YT("P_npz8GwV2s","Dani Winks (pancake drill)")]
+};
+const YOGA=[YT("XeXz8fIZDCE","Yoga for Lower Back Pain (~16 min) · Yoga With Adriene"),YT("X3-gKPNyrTA","Yoga for Neck, Shoulders & Upper Back (10 min) · Yoga With Adriene")];
+
+const TIPS={
+  htm:"Back: brace your belly before each rep and keep your ribs down. Lock out with your glutes, not your lower back.",
+  slht:"Back: brace first, ribs down, hips level. Lock out with the glute.",
+  bstance:"Back: brace first, ribs down. Lock out with the glute, not the lower back.",
+  smithrdl:"Back: brace first and keep your back flat the whole time. If you feel it in your lower back instead of your hamstrings, don't go as low.",
+  pullthrough:"Back: the movement comes from the hips. Keep your back flat.",
+  legcurl:"Back: keep your hips pressed into the seat or pad. Don't arch.",
+  kickback:"Back: ribs down and belly tight. Don't arch to kick higher.",
+  cablerow:"Posture: sit tall and pull your shoulders down and back before each pull.",
+  closerow:"Posture: sit tall and pull your shoulders down and back before each pull.",
+  facepull:"Posture: one of your best posture exercises. Finish with your shoulders back and down and your chin slightly tucked.",
+  pulldown:"Posture: chest up, shoulders down away from your ears.",
+  pushdown:"Posture: stand tall, shoulders back, belly lightly tight.",
+  chestpress:"Posture: keep your shoulder blades pressed into the pad so your shoulders don't roll forward.",
+  deadbug:"Back: this strengthens the deep muscles that protect your lower back.",
+  birddog:"Back: one of the best exercises for a sensitive lower back.",
+  curlup:"Back: strengthens your abs without bending the spine like a sit-up.",
+  chintuck:"Posture: fixes a forward head. Do it whenever you remember during the day.",
+  doorway:"Posture: opens the chest that pulls your shoulders forward."
+};
+
+const DAYS={
+  A:[
+    {h:"Warm-up",t:"~14 min",warm:true,x:[["walk","5 min"],["catcow","8"],["n9090","8 / side"],["cars","5 / dir"],["openbook","8 / side"],["bridge","2 × 12","30s"]]},
+    {h:"1 · Mat",t:"sets × reps · rest",x:[["clamshell","2 × 15–20 / side","30s"],["deadbug","3 × 8 / side","30s"],["birddog","2 × 6 / side","30s"]]},
+    {h:"2 · Machines",t:"sets × reps · rest",x:[["htm","3 × 8–12","2 min"],["legcurl","3 × 10–12","90s"],["kickback","3 × 12–15 / side","60s"],["cablerow","3 × 10–12","90s"],["facepull","3 × 15","60s"]]},
+    {h:"Cool-down",t:"~7 min",warm:true,x:[["fig4","40s / side"],["supham","40s / side"],["doorway","30s / side"],["chintuck","8 × 5s"],["kneechest","30s"]]}
+  ],
+  B:[
+    {h:"Warm-up",t:"~14 min",warm:true,x:[["walk","5 min"],["legswing","12 / side"],["wallhinge","10"],["rockback","10 / side"],["wallslide","10 + 10"]]},
+    {h:"1 · Mat",t:"sets × reps · rest",x:[["donkey","2 × 15 / side","30s"],["birddog","3 × 6 / side","30s"],["sideplank","3 × 20–30s / side","30s"]]},
+    {h:"2 · Machines",t:"sets × reps · rest",x:[["smithrdl","3 × 10","2 min"],["slht","3 × 10–12 / side","60s"],["legcurl","2 × 12–15","60s"],["chestpress","2 × 12–15","60s"]]},
+    {h:"Cool-down",t:"~7 min",warm:true,x:[["supham","45s / side"],["fig4","40s / side"],["hipflexor","30s / side"],["doorway","30s / side"],["childs","30s"]]}
+  ],
+  C:[
+    {h:"Warm-up",t:"~14 min",warm:true,x:[["walk","5 min"],["childs","8 + 30s"],["n9090","8 / side"],["cars","5 / dir"],["wallslide","10 + 10"],["bridge","2 × 10","30s"]]},
+    {h:"1 · Mat",t:"sets × reps · rest",x:[["clamshell","2 × 15–20 / side","30s"],["curlup","3 × 6 holds","30s"],["deadbug","2 × 8 / side","30s"]]},
+    {h:"2 · Machines",t:"sets × reps · rest",x:[["bstance","3 × 10–12 / side","90s"],["pullthrough","3 × 12–15","60s"],["closerow","3 × 10–12","90s"],["pulldown","3 × 10–12","90s"],["facepull","2 × 15","60s"],["pushdown","3 × 12–15","60s"]]},
+    {h:"Cool-down",t:"~7 min",warm:true,x:[["fig4","40s / side"],["sidechild","30s / side"],["doorway","30s / side"],["chintuck","8 × 5s"],["kneechest","30s"]]}
+  ]
+};
+const SPLITS=[
+  {h:"Warm-up",t:"~5 min",warm:true,x:[["legswing","15 / way"],["lungerock","10 / side"]]},
+  {h:"Front split",t:"~18 min",x:[["hipflexor","2 × 45s / side"],["halfsplit","2 × 45s / side"],["lizard","60s / side"],["pigeon","60s / side"],["pnf","3 rounds / side"],["splitslide","2 × 60s / side"]]},
+  {h:"Middle split (optional)",t:"~4 min",x:[["frog","60s"],["pancake","2 × 60s"]]}
+];
+const POSTURE={h:"Posture + lower back",t:"~8 min",warm:true,x:[["chintuck","10 × 5s"],["wallslide","10"],["doorway","2 × 30s / side"],["birddog","2 × 6 / side"],["deadbug","2 × 8 / side"]]};
+const YOGABLOCK={yoga:true};
+const PLAN={
+  mon:{t:"Monday · Day A",s:"Gym · glutes + back posture · ~75 min",gym:true,b:DAYS.A,dow:1},
+  tue:{t:"Tuesday",s:"Home · splits + posture · ~35 min",b:[...SPLITS,POSTURE],dow:2,split:true},
+  wed:{t:"Wednesday · Day B",s:"Gym · back of legs + lower glutes · ~70 min",gym:true,b:DAYS.B,dow:3},
+  thu:{t:"Thursday",s:"Rest day · walk + a little posture",b:[{h:"Rest day",t:"~45 min",warm:true,x:[["easywalk","30–40 min"],["chintuck","10 × 5s"],["doorway","2 × 30s / side"],["kneechest","30s"]]}],dow:4},
+  fri:{t:"Friday · Day C",s:"Gym · glutes + back + arms · ~75 min",gym:true,b:DAYS.C,dow:5},
+  sat:{t:"Saturday",s:"Home · yoga + posture · ~25 min",b:[YOGABLOCK,POSTURE],dow:6},
+  sun:{t:"Sunday",s:"Home · splits + posture · ~35 min",b:[...SPLITS,POSTURE],dow:0,split:true}
+};
+
+/* cycle */
+const PH={
+  period:{n:"Period",tip:"Train if you feel OK, but use about 10–20% lighter weights. On heavy days, swap the gym for the yoga class or a walk. Eat a beef or lentil meal for iron."},
+  foll:{n:"High-energy phase",tip:"Usually your strongest days. Try to add a rep or a little weight."},
+  ovu:{n:"Ovulation",tip:"Still strong. Warm up well and control every rep, because joints can be a bit looser around now."},
+  lut:{n:"Luteal phase",tip:"Keep the same weights and focus on clean form. You may be hungrier, and 100–150 extra kcal is fine."},
+  late:{n:"Before your period",tip:"Energy may dip and you may hold 1–2 kg of water. Do the session, but it's fine to drop the last set. Ignore the scale this week."}
+};
+
+</script>
+<script src="app.js"></script>
+<script>
+if("serviceWorker" in navigator){window.addEventListener("load",()=>{navigator.serviceWorker.register("sw.js").catch(()=>{});});}
+</script>
+</body>
+</html>
