@@ -323,7 +323,7 @@ function route() {
   else if (h === "cycle") app.innerHTML = viewCycle();
   else if (h === "overview") app.innerHTML = viewOverview();
   else if (h === "food") app.innerHTML = viewFood();
-  else { app.innerHTML = viewDay(iso(today())); nav = "today"; }
+  else { const st = parseD(S.start); app.innerHTML = (today() < st ? `<div class="note accent"><strong>Your 16 weeks start ${esc(fmt(st))}.</strong> Here's your first day.</div>` : "") + viewDay(iso(today() < st ? st : today())); nav = "today"; }
   document.querySelectorAll("nav.bar a").forEach(a => { if (a.dataset.nav === nav) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
   if (h === "cal") { const el = document.querySelector(".istoday"); if (el && el.scrollIntoView) setTimeout(() => el.scrollIntoView({ block: "center" }), 50); }
 }
