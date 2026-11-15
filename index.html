@@ -126,6 +126,30 @@ details.how[open] summary::before{content:"− "}
 .meal small{grid-column:1/-1;color:var(--muted);font-size:.86rem}
 .total{display:flex;justify-content:space-between;font-family:var(--display);font-weight:600;padding-top:8px}
 .vlist a{display:block;margin:6px 0;font-weight:600}
+nav.bar a{font-size:.62rem}
+nav.bar a svg{width:22px;height:22px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.stat{background:var(--soft);border-radius:10px;padding:10px 12px;min-width:0}
+.stat b{display:block;font-family:var(--display);font-size:1rem;line-height:1.25}
+.stat span{font-size:.75rem;color:var(--muted);display:block;line-height:1.3}
+.chip{display:inline-block;font-size:.74rem;font-weight:600;padding:2px 9px;border-radius:999px;margin:2px 4px 2px 0;white-space:nowrap}
+.ph-period{background:#fbe3e6;color:#9b1c31}.ph-foll{background:#e3f4ea;color:#2f6b47}.ph-ovu{background:#fff1d6;color:#8a5a00}.ph-lut{background:#ece6f7;color:#5b3d8f}.ph-late{background:#eeeaee;color:#5d5560}.ph-none{background:var(--line)}
+.hero .chip{border:1px solid rgba(255,255,255,.6)}
+.legend{margin:8px 0 4px}
+.cal{display:flex;gap:10px;align-items:flex-start;min-width:0}
+.dot{width:12px;height:12px;border-radius:50%;flex:none;margin-top:6px}
+.dot.ph-period{background:#d9485f}.dot.ph-foll{background:#4d9a6c}.dot.ph-ovu{background:#e0a32a}.dot.ph-lut{background:#8a6cc4}.dot.ph-late{background:#a39ba6}
+.list a.istoday{background:var(--accent-soft)}
+.list .li.wk{background:var(--soft)}
+.list .stat{background:none;padding:0;font-weight:600;color:var(--sage);white-space:nowrap}
+.gymtxt{color:var(--accent);font-weight:600}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.mcard{border-color:var(--accent);border-width:2px}
+.cue{display:block;font-size:.82rem;margin-top:4px;padding:4px 8px;border-radius:6px;background:var(--accent-soft);color:var(--accent);font-weight:600}
+details.note summary,details.card summary{cursor:pointer;list-style:none}
+details.note summary::-webkit-details-marker,details.card summary::-webkit-details-marker{display:none}
+details.card summary::after{content:" +";color:var(--accent)}
+details.card[open] summary::after{content:" −"}
 [hidden]{display:none!important}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));background:var(--fg);color:#fff;padding:8px 14px;border-radius:10px;font-size:.88rem;z-index:30}
 </style>
@@ -134,9 +158,10 @@ details.how[open] summary::before{content:"− "}
 <main class="wrap" id="app"></main>
 <nav class="bar" aria-label="App sections">
   <a href="#today" data-nav="today"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/></svg>Today</a>
-  <a href="#week" data-nav="week"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Plan</a>
+  <a href="#cal" data-nav="cal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg>16 weeks</a>
+  <a href="#measure" data-nav="measure"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="8" width="20" height="8" rx="2"/><path d="M6 8v4M10 8v3M14 8v4M18 8v3"/></svg>Measure</a>
   <a href="#cycle" data-nav="cycle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16"/></svg>Cycle</a>
-  <a href="#me" data-nav="me"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>Me</a>
+  <a href="#overview" data-nav="overview"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>Overview</a>
   <a href="#food" data-nav="food"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 3v8a3 3 0 0 0 6 0V3M10 3v18M17 3c-2 2-2 6 0 8v10"/></svg>Food</a>
 </nav>
 <template id="foodtpl">
