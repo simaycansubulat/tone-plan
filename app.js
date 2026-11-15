@@ -55,6 +55,50 @@ function cycleAt(date) {
 function progWeek(date) { return Math.floor(dDiff(parseD(S.start), date) / 7) + 1; }
 function inProgram(date) { const n = dDiff(parseD(S.start), date); return n >= 0 && n < PROGRAM_DAYS; }
 
+/* ---------- home workouts after the gym membership ends ---------- */
+if (!S.gymEnd) S.gymEnd = "2027-02-05";
+Object.assign(EX, {
+  marchwarm: { n: "Marching warm-up", s: "Gets your body warm without equipment.", how: ["March on the spot, lifting your knees to hip height, swinging your arms.", "Every 30 seconds switch to: arm circles, side steps, gentle torso turns.", "3–5 minutes, until you feel warm."], q: "low impact warm up" },
+  sofahip: { n: "Hip thrust on the sofa", tag: ["back", "back-safe"], s: "Your home version of the hip thrust machine.", start: "Start: bodyweight. Later: a backpack with books on your hips", how: ["Sit on the floor with your upper back (just under the shoulder blades) against the edge of a sofa or bed.", "Feet flat, hip-width apart, knees bent. Chin tucked.", "Push through your heels and lift your hips until your body is straight from knees to shoulders. Squeeze 2 seconds.", "Lower slowly until your hips almost touch the floor."], avoid: ["Arching your lower back at the top. Ribs stay down.", "The sofa sliding: put it against a wall."], q: "hip thrust on couch" },
+  slbridge: { n: "Single-leg glute bridge", tag: ["side", "hip-dip area"], s: "One-leg glute work for the side glutes, no equipment.", how: ["Lie on your back, knees bent, feet flat.", "Lift one foot and hold that knee toward your chest.", "Push through the heel of the other foot and lift your hips, keeping them level.", "Squeeze 1 second at the top, lower slowly. All reps one side, then the other."], avoid: ["Hips tilting to one side.", "Arching your lower back."], q: "single leg glute bridge" },
+  frogpump: { n: "Frog pumps", s: "Fast glute burner with knees turned out. Very low TFL.", how: ["Lie on your back, put the soles of your feet together and let your knees fall open.", "Pull your heels toward your glutes.", "Push through the outside edges of your feet and lift your hips, squeezing hard.", "Lower and repeat quickly but controlled."], avoid: ["Arching your back at the top."], q: "frog pumps glutes" },
+  sliderhc: { n: "Towel hamstring curl", tag: ["back", "back-safe"], s: "Firms the back of the thighs (cellulite area) at home.", how: ["Lie on your back on a smooth floor, heels on a towel (or socks), knees bent.", "Lift your hips into a bridge.", "Slowly slide your heels away until your legs are almost straight, keeping hips up.", "Pull your heels back in. Too hard? Lower your hips between reps."], avoid: ["Letting your hips drop and your back arch."], q: "towel hamstring curl" },
+  kneepush: { n: "Push-up on knees", s: "Tones chest and the back of the arms with your bodyweight.", how: ["Hands a little wider than your shoulders, knees on a mat, body straight from head to knees.", "Tighten your belly and squeeze your glutes.", "Lower your chest toward the floor, elbows at about 45° from your body.", "Push back up."], avoid: ["Hips sagging. If your back hurts, do them against a kitchen counter instead."], q: "knee push ups" },
+  bottlekick: { n: "Triceps kickback with water bottles", s: "Back of the upper arms. Use two full 1–1.5 L bottles.", how: ["Stand with feet hip-width, soft knees, lean forward slightly with a flat back.", "Elbows pinned at your sides, bent at 90°.", "Straighten your arms back until they're straight, squeeze the backs of your arms.", "Bend them back slowly."], avoid: ["Swinging the elbows.", "Rounding your back."], q: "tricep kickback" },
+  proneyt: { n: "Floor Y and T raises", s: "Posture: strengthens the upper back without equipment.", how: ["Lie face down, forehead on a folded towel, legs relaxed on the floor.", "Y: arms stretched forward in a Y, thumbs up. Lift your arms a few centimetres by squeezing your shoulder blades. Hold 2 s.", "T: arms out to the sides like a T, thumbs up. Lift and hold 2 s.", "Alternate Y and T. Only the arms lift, never the legs."], avoid: ["Lifting your chest high or your legs (that strains the lower back)."], q: "prone y t raise" }
+});
+Object.assign(WORKS, { marchwarm: "Heart, whole body (warm-up)", sofahip: "Glute max (main); some hamstrings and gluteus medius", slbridge: "Glute max and gluteus medius (side glutes)", frogpump: "Glute max, especially with the knees turned out", sliderhc: "Hamstrings (back of the thighs) and glutes", kneepush: "Chest, triceps (back of the arms), core", bottlekick: "Triceps (back of the upper arm)", proneyt: "Middle and lower trapezius, rear shoulders (posture)" });
+Object.assign(TIPS, { sofahip: "Back: brace first, ribs down. Lock out with your glutes, not your lower back.", slbridge: "Back: ribs down and hips level.", sliderhc: "Back: keep your hips up and belly tight.", proneyt: "Posture: shoulders down away from your ears, chin slightly tucked.", kneepush: "Back: belly tight so your hips don't sag." });
+Object.assign(VIDEOS, {
+  sofahip: [YT("RR0oZhhUVWo", "Get Strong with Emily"), YT("PCzON8KAV1A", "at home · Casey Shipp")],
+  slbridge: [YT("9bl48SV62u4", "Doctor Jo, physical therapist")],
+  frogpump: [YT("OCMhnXQFzCI", "Hailey Happens Fitness")],
+  sliderhc: [YT("cjtsLDniFpk", "Gillian Gelinas")],
+  kneepush: [YT("CbjT4e_BgAs", "Sami Leigh Fitness")],
+  bottlekick: [YT("9pKPXi69uJs", "Krissy Cela (dumbbells: use water bottles)")],
+  proneyt: [YT("Xgi0r1pYmvk", "Y raise · Doctor Jo, physical therapist"), YT("Yv6sUKOwOY8", "Y, T and more · Doctor Jo")],
+  marchwarm: [YT("TkrmqzZ5UGI", "Lucy Wyndham-Read")]
+});
+const HOME = {
+  mon: { t: "Monday · Home A", s: "Home · glutes + core + posture · ~45 min", gym: true, home: true, dow: 1, b: [
+    { h: "Warm-up", t: "~10 min", warm: true, x: [["marchwarm", "4 min"], ["catcow", "8"], ["n9090", "8 / side"], ["cars", "5 / dir"], ["openbook", "8 / side"], ["bridge", "2 × 12", "30s"]] },
+    { h: "1 · Glutes (mat)", t: "sets × reps · rest", x: [["clamshell", "3 × 20 / side", "30s"], ["sofahip", "4 × 12–15", "90s"], ["slbridge", "3 × 10 / side", "60s"], ["donkey", "3 × 20 / side", "30s"], ["frogpump", "2 × 20", "45s"]] },
+    { h: "2 · Core + posture (mat)", t: "sets × reps · rest", x: [["deadbug", "3 × 10 / side", "30s"], ["birddog", "3 × 8 / side", "30s"], ["proneyt", "3 × 8", "45s"]] },
+    DAYS.A[3]] },
+  wed: { t: "Wednesday · Home B", s: "Home · back of legs + core + arms · ~45 min", gym: true, home: true, dow: 3, b: [
+    { h: "Warm-up", t: "~10 min", warm: true, x: [["marchwarm", "4 min"], ["legswing", "12 / side"], ["wallhinge", "10"], ["rockback", "10 / side"], ["wallslide", "10 + 10"]] },
+    { h: "1 · Glutes + hamstrings (mat)", t: "sets × reps · rest", x: [["sliderhc", "3 × 8–10", "60s"], ["slbridge", "3 × 12 / side", "60s"], ["donkey", "3 × 20 / side", "30s"], ["frogpump", "3 × 20", "45s"]] },
+    { h: "2 · Core + arms (mat)", t: "sets × reps · rest", x: [["birddog", "3 × 8 / side", "30s"], ["sideplank", "3 × 30s / side", "30s"], ["kneepush", "3 × 6–10", "60s"]] },
+    DAYS.B[3]] },
+  fri: { t: "Friday · Home C", s: "Home · glutes + posture + arms · ~45 min", gym: true, home: true, dow: 5, b: [
+    { h: "Warm-up", t: "~10 min", warm: true, x: [["marchwarm", "4 min"], ["childs", "8 + 30s"], ["n9090", "8 / side"], ["cars", "5 / dir"], ["wallslide", "10 + 10"], ["bridge", "2 × 10", "30s"]] },
+    { h: "1 · Glutes (mat)", t: "sets × reps · rest", x: [["clamshell", "3 × 20 / side", "30s"], ["sofahip", "3 × 15", "90s"], ["slbridge", "3 × 12 / side", "60s"]] },
+    { h: "2 · Core, posture + arms (mat)", t: "sets × reps · rest", x: [["curlup", "3 × 10 holds", "30s"], ["deadbug", "2 × 10 / side", "30s"], ["proneyt", "3 × 8", "45s"], ["bottlekick", "3 × 12–15", "45s"], ["kneepush", "2 × 6–10", "60s"]] },
+    DAYS.C[3]] }
+};
+function planFor(date) { const k = DOWKEY[date.getDay()]; return (HOME[k] && iso(date) > S.gymEnd) ? HOME[k] : PLAN[k]; }
+function dayLabel(p) { return p.gym ? (p.home ? "Home " : "Gym ") + p.t.slice(-1) : (p.dow === 4 ? "Rest" : (p.dow === 6 ? "Yoga" : "Splits")); }
+
 /* ---------- 16-week progression ---------- */
 const BLOCKS = [
   { w: [1, 2], name: "Learn", cap: 2, note: "Learn the moves: 2 sets of everything, light weights, 3–4 reps left in the tank. Watch the videos and focus on form." },
@@ -67,12 +111,12 @@ const BLOCKS = [
 const OVR = {
   Build: { htm: "4 × 10–12", bstance: "4 × 10–12 / side", smithrdl: "3 × 8–10", kickback: "3 × 15 / side", legcurl: "3 × 10–12", clamshell: "3 × 15 / side", donkey: "3 × 15 / side", deadbug: "3 × 10 / side", birddog: "3 × 8 / side", sideplank: "3 × 30–40s / side", curlup: "3 × 8 holds" },
   Strength: { htm: "4 × 6–10", slht: "3 × 8–10 / side", bstance: "4 × 8–10 / side", smithrdl: "4 × 8", kickback: "3 × 12 / side", legcurl: "3 × 8–12", cablerow: "3 × 8–12", closerow: "3 × 8–12", pulldown: "3 × 8–12", pushdown: "3 × 10–12", chestpress: "2 × 10–12", clamshell: "3 × 20 / side", donkey: "3 × 20 / side", deadbug: "3 × 12 / side", birddog: "3 × 10 / side", sideplank: "3 × 40s / side", curlup: "3 × 10 holds" },
-  Shape: { htm: "4 × 12–15", slht: "3 × 12–15 / side", bstance: "3 × 12–15 / side", smithrdl: "3 × 10–12", kickback: "4 × 15 / side", legcurl: "3 × 12–15", clamshell: "3 × 20 / side", donkey: "3 × 20 / side", deadbug: "3 × 12 / side", birddog: "3 × 10 / side", sideplank: "3 × 40s / side", curlup: "3 × 10 holds" }
+  Shape: { sofahip: "4 × 15–20", slbridge: "3 × 15 / side", frogpump: "3 × 25", sliderhc: "3 × 10–12", kneepush: "3 × 8–12", bottlekick: "3 × 15", proneyt: "3 × 10", htm: "4 × 12–15", slht: "3 × 12–15 / side", bstance: "3 × 12–15 / side", smithrdl: "3 × 10–12", kickback: "4 × 15 / side", legcurl: "3 × 12–15", clamshell: "3 × 20 / side", donkey: "3 × 20 / side", deadbug: "3 × 12 / side", birddog: "3 × 10 / side", sideplank: "3 × 40s / side", curlup: "3 × 10 holds" }
 };
 const BLOCKCUE = {
   Build: { htm: "This block: squeeze 2 seconds at the top of every rep.", clamshell: "This block: rest a 2.5–5 kg plate on your top knee.", donkey: "This block: hold a light dumbbell behind your knee or use an ankle weight." },
   Strength: { htm: "This block: heavier. Pick a weight where 6–10 reps is hard.", smithrdl: "This block: heavier, 4 sets of 8. Back flat, every rep.", sideplank: "This block: if it's pain-free, try it with straight legs." },
-  Shape: { htm: "This block: 3 seconds lowering + 2-second squeeze at the top.", smithrdl: "This block: 3 seconds on the way down.", slht: "This block: 3 seconds lowering.", bstance: "This block: 3 seconds lowering." }
+  Shape: { sofahip: "This block: hold a backpack with books on your hips, 3 seconds down, 2-second squeeze.", slbridge: "This block: 3 seconds lowering.", htm: "This block: 3 seconds lowering + 2-second squeeze at the top.", smithrdl: "This block: 3 seconds on the way down.", slht: "This block: 3 seconds lowering.", bstance: "This block: 3 seconds lowering." }
 };
 const STEP = { htm: 5, slht: 5, bstance: 5, smithrdl: 5, legcurl: 2.5, kickback: 2.5, cablerow: 2.5, closerow: 2.5, pulldown: 2.5, pushdown: 2.5, chestpress: 2.5, facepull: 2.5, pullthrough: 2.5 };
 function blockOf(week) { return BLOCKS.find(b => week >= b.w[0] && week <= b.w[1]) || BLOCKS[BLOCKS.length - 1]; }
@@ -224,7 +268,7 @@ function exRow(date, bi, block, item, week, cap) {
   return `<div class="ex${done ? " isdone" : ""}" data-row="${key}"><div class="exhead"><div class="n"><strong>${esc(e.n)}</strong>${tag}${works}<small class="s">${esc(e.s)}</small>${startTxt}${tip}${cue}</div><div class="sr">${esc(srTxt)}${rest ? `<span class="rest">rest ${esc(rest)}</span>` : ""}</div></div>${howHTML(id)}${logUI}</div>`;
 }
 function countProgress(dIso) {
-  const date = parseD(dIso); const plan = PLAN[DOWKEY[date.getDay()]]; const week = progWeek(date); const m = dayMods(plan, week, cycleAt(date));
+  const date = parseD(dIso); const plan = planFor(date); const week = progWeek(date); const m = dayMods(plan, week, cycleAt(date));
   let total = 0, done = 0; const lg = S.logs[dIso] || { ex: {}, chk: {} };
   plan.b.forEach((b, bi) => {
     if (b.yoga) { total++; if ((lg.chk || {})[bi + ":yoga"]) done++; return; }
@@ -241,7 +285,7 @@ function countProgress(dIso) {
 /* ---------- views ---------- */
 const HABITS = [["steps", "6–8k steps"], ["protein", "100 g+ protein"], ["water", "2 L water"], ["iron", "Iron tablet"], ["vitd", "Vitamin D"], ["posture", "Chin tucks today"]];
 function viewDay(dateIso) {
-  const date = parseD(dateIso); const key = DOWKEY[date.getDay()]; const plan = PLAN[key];
+  const date = parseD(dateIso); const key = DOWKEY[date.getDay()]; const plan = planFor(date);
   const week = progWeek(date); const ci = cycleAt(date); const isToday = dateIso === iso(today());
   const m = dayMods(plan, week, ci); const pr = countProgress(dateIso); const inP = inProgram(date);
   const weekTxt = inP ? `Week ${week} of 16 · ${m.block.name}` : (week < 1 ? "Your plan starts Mon 16 Nov" : "16 weeks finished!");
@@ -259,6 +303,8 @@ function viewDay(dateIso) {
   <div class="hero"><div class="small" style="color:#fff;opacity:.92">${esc(fmt(date))} · ${esc(weekTxt)}</div><h1>${esc(plan.t)}</h1><div class="sub">${esc(plan.s)}</div><div style="margin-top:8px">${ph}</div><div class="progress"><i id="pbar" style="width:${pr.total ? Math.round(pr.done / pr.total * 100) : 0}%"></i></div><div class="small" style="color:#fff;opacity:.92;margin-top:4px" id="ptxt">${pr.done} of ${pr.total} done</div></div>
   ${m.notes.length ? `<div class="note good"><strong>Today:</strong> ${m.notes.map(esc).join(" ")}</div>` : ""}
   ${m.food ? `<div class="note accent"><strong>Food today:</strong> ${esc(m.food)}</div>` : ""}
+  ${dateIso === S.gymEnd && plan.gym && !plan.home ? `<div class="note accent"><strong>Last gym day!</strong> From Monday your Mon/Wed/Fri workouts are home mat workouts. Write down your best hip thrust weight today.</div>` : ""}
+  ${plan.home ? `<div class="note accent"><strong>Home workout:</strong> same goals, no machines. Do the reps slowly and squeeze hard. To make it harder, add reps or put a backpack with books on your hips for the sofa hip thrust.</div>` : ""}
   ${blockNote}${measure}
   <div class="card"><h3>Daily habits</h3><div class="habits">${HABITS.map(h => `<label class="chk"><input type="checkbox" data-h="${h[0]}" data-date="${dateIso}" ${hab[h[0]] ? "checked" : ""}>${esc(h[1])}</label>`).join("")}</div></div>
   ${brace}${blocks}`;
@@ -267,9 +313,9 @@ function viewCalendar() {
   const st = parseD(S.start); const end = addD(st, PROGRAM_DAYS - 1); const t = today(); const tI = iso(t); const md = measureDays();
   const before = t < st, after = t > end;
   const ref = before ? st : (after ? end : t); const rI = iso(ref);
-  const wk = progWeek(ref); const b = blockOf(wk); const plan = PLAN[DOWKEY[ref.getDay()]]; const ci = cycleAt(ref); const pr = countProgress(rI);
+  const wk = progWeek(ref); const b = blockOf(wk); const plan = planFor(ref); const ci = cycleAt(ref); const pr = countProgress(rI);
   const nextM = md.find(d => d >= tI);
-  const label = p => p.gym ? "Gym " + p.t.slice(-1) : (p.dow === 4 ? "Rest" : (p.dow === 6 ? "Yoga" : "Splits"));
+  const label = dayLabel;
   let html = `<a class="here" href="#d-${rI}">
     <span class="small">${before ? "Your plan starts" : (after ? "Last day of your plan" : "You are here · today")}</span>
     <span class="hdate">${esc(ref.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" }))}</span>
@@ -278,7 +324,7 @@ function viewCalendar() {
     <span class="hgo">${pr.done ? `${pr.done} of ${pr.total} done · continue` : "Open this day"} →</span></a>
   ${nextM && nextM !== rI ? `<p class="small" style="margin:8px 0 0">📏 Next measurement: <b>${esc(fmt(parseD(nextM)))}</b></p>` : ""}
   <div class="card keybox"><b>How to read the calendar</b>
-    <div class="keyrow"><span class="kc gymk">Gym A</span> gym days (A, B, C) · <span class="kc">Splits</span> <span class="kc">Yoga</span> <span class="kc">Rest</span> home days</div>
+    <div class="keyrow"><span class="kc gymk">Gym A</span> gym days (A, B, C) · <span class="kc gymk">Home A</span> home workouts after ${esc(fmt(parseD(S.gymEnd)))} ·<span class="kc">Splits</span> <span class="kc">Yoga</span> <span class="kc">Rest</span> home days</div>
     <div class="keyrow">Colour = cycle phase: <span class="chip ph-period">Period</span><span class="chip ph-foll">Strong</span><span class="chip ph-ovu">Ovulation</span><span class="chip ph-lut">Luteal</span><span class="chip ph-late">Pre-period</span></div>
     <div class="keyrow">📏 measurement day · ✓ finished · • started · outlined = today</div></div>`;
   let m = new Date(st.getFullYear(), st.getMonth(), 1);
@@ -290,7 +336,7 @@ function viewCalendar() {
     for (let dn = 1; dn <= days; dn++) {
       const d = new Date(y, mo, dn); const dI = iso(d);
       if (d < st || d > end) { html += `<span class="cell out"><span class="dn">${dn}</span></span>`; continue; }
-      const p = PLAN[DOWKEY[d.getDay()]]; const c = cycleAt(d); const pc = countProgress(dI);
+      const p = planFor(d); const c = cycleAt(d); const pc = countProgress(dI);
       const mark = (md.includes(dI) ? "📏" : "") + (pc.total && pc.done >= pc.total ? "✓" : (pc.done ? "•" : ""));
       html += `<a href="#d-${dI}" class="cell ph-${c ? c.k : "none"}${dI === tI ? " istoday" : ""}${p.gym ? " gymcell" : ""}" aria-label="${esc(fmt(d))}: ${esc(label(p))}${c ? ", cycle day " + c.day + ", " + esc(c.ph.n) : ""}"><span class="dn">${dn}</span><span class="ic">${esc(label(p))}</span><span class="mk">${mark}</span></a>`;
     }
@@ -345,12 +391,13 @@ function viewOverview() {
   <div class="soft"><h3 style="color:var(--accent)">My goals</h3><ul class="clean"><li>Feminine, toned, not muscular</li><li>Small waist; lose belly fat and love handles</li><li>Flat, strong core that doesn't get thicker</li><li>Round "bubble" glutes, full and wide from the front</li><li>Slim, toned legs with less cellulite</li><li>Slimmer upper arms; toned back that doesn't get wider</li><li>Strong lower back, good posture, front split</li></ul>
   <h3 style="color:var(--accent);margin-top:10px">My rules</h3><ul class="clean"><li><b>No boxy hips:</b> no abduction machine, side leg raises, lunges or split squats</li><li><b>No thick legs:</b> no squats, leg press or leg extensions</li><li><b>No thick waist:</b> no weighted side bends or twists</li><li><b>No bulky arms or wide back:</b> no biceps, no shoulder presses, little lat work</li><li><b>Back-safe:</b> no planks, back extensions or heavy deadlifts</li><li>Order: warm-up → mat → machines → cool-down</li></ul></div>
   <h2>My week</h2><div class="list">${["mon", "tue", "wed", "thu", "fri", "sat", "sun"].map(k => `<div class="li"><b class="${PLAN[k].gym ? "gymtxt" : ""}">${esc(PLAN[k].t)}</b><span class="small" style="text-align:right">${esc(PLAN[k].s)}</span></div>`).join("")}</div>
+  <p class="small">Gym until <b>${esc(fmt(parseD(S.gymEnd)))}</b>. After that, Mon/Wed/Fri are <b>Home A, B and C</b>: mat workouts for glutes, core, posture and arms.</p>
   <h2>How the 16 weeks get harder</h2><div class="card">${BLOCKS.map(b => `<div class="phase"><div class="w">Week${b.w[0] === b.w[1] ? " " + b.w[0] : "s " + b.w[0] + "–" + b.w[1]}</div><div><b>${esc(b.name)}</b><br><span class="small">${esc(b.note)}</span></div></div>`).join("")}</div>
   <div class="note accent"><strong>Weights:</strong> on machine exercises the app suggests today's weight from what you logged last time. If you did the top of the rep range on every set, it adds a step (5 kg on the hip thrust and Smith machines, 2.5 kg on cables). Always choose good form over the number.</div>
   <h2>How your cycle changes each day</h2><ul class="clean"><li><b>Period days 1–2:</b> gym days drop to 2 sets and about 20% lighter.</li><li><b>Days 3–5:</b> normal sets, a bit lighter if you're tired.</li><li><b>Strong phase:</b> push for an extra rep or weight.</li><li><b>Ovulation:</b> strong, but extra careful warm-up.</li><li><b>Luteal:</b> same weights, clean form.</li><li><b>Pre-period:</b> drop the last set if you're tired; ignore the scale.</li></ul>
   <p class="small">Research on cycle-based training is mixed, so treat this as guidance and listen to your body.</p>
   <h2>Gym basics</h2><div class="gloss"><div><b>Rep</b>: one full movement.</div><div><b>Set</b>: reps in a row. "3 × 10" = 3 sets of 10.</div><div><b>Rest</b>: pause between sets.</div><div><b>/ side</b>: all reps on one side, then the other.</div><div><b>Reps left</b>: stop most sets when 1–3 more would be possible.</div><div><b>Weight</b>: move the pin, or add plates.</div></div>
-  <h2>My details</h2><div class="card"><div class="row"><label class="field">Age<input type="number" inputmode="numeric" id="age" value="${esc(S.profile.age || "")}"></label><label class="field">Height (cm)<input type="number" inputmode="numeric" id="height" value="${esc(S.profile.height || "")}"></label><label class="field">Start weight (kg)<input type="number" inputmode="decimal" step="0.1" id="sweight" value="${esc(S.profile.startWeight || "")}"></label></div><button type="button" class="btn ghost" id="psave" style="margin-top:10px">Save details</button></div>
+  <h2>My details</h2><div class="card"><div class="row"><label class="field">Age<input type="number" inputmode="numeric" id="age" value="${esc(S.profile.age || "")}"></label><label class="field">Height (cm)<input type="number" inputmode="numeric" id="height" value="${esc(S.profile.height || "")}"></label><label class="field">Start weight (kg)<input type="number" inputmode="decimal" step="0.1" id="sweight" value="${esc(S.profile.startWeight || "")}"></label><label class="field">Gym membership ends<input type="date" id="gymend" value="${esc(S.gymEnd)}"></label></div><p class="small" style="margin:6px 0 0">After the gym end date, Mon/Wed/Fri become home mat workouts automatically.</p><button type="button" class="btn ghost" id="psave" style="margin-top:10px">Save details</button></div>
   <h2>Backup</h2><p class="small">Everything is saved only on this phone. Make a backup once a month and keep it in Files or iCloud Drive.</p>
   <div class="row"><button type="button" class="btn" id="exp">Save a backup</button><label class="btn ghost" for="imp">Restore a backup</label><input type="file" id="imp" accept="application/json,.json" hidden></div>
   <p class="small" style="margin-top:20px">General guidance, not medical advice. Follow your doctor's dosing for iron and vitamin D. If back pain keeps coming back, see a physiotherapist.</p>`;
@@ -475,7 +522,7 @@ document.addEventListener("click", async ev => {
   if (el.id === "padd") { const v = document.getElementById("pdate").value; if (!v) return; if (!S.periods.includes(v)) S.periods.push(v); save(); route(); toast("Period saved. Your calendar has been updated."); }
   else if (el.dataset.delp) { S.periods = S.periods.filter(p => p !== el.dataset.delp); save(); route(); }
   else if (el.id === "csave") { const pl = +document.getElementById("plen").value, cl = +document.getElementById("clen").value; if (pl >= 2 && pl <= 10) S.periodLen = pl; if (cl >= 20 && cl <= 40) S.cycleLen = cl; save(); route(); toast("Saved"); }
-  else if (el.id === "psave") { const a = +document.getElementById("age").value, h = +document.getElementById("height").value, w = +document.getElementById("sweight").value; if (a) S.profile.age = a; if (h) S.profile.height = h; if (w) S.profile.startWeight = w; save(); toast("Details saved"); }
+  else if (el.id === "psave") { const a = +document.getElementById("age").value, h = +document.getElementById("height").value, w = +document.getElementById("sweight").value; if (a) S.profile.age = a; if (h) S.profile.height = h; if (w) S.profile.startWeight = w; const ge = document.getElementById("gymend").value; if (ge) S.gymEnd = ge; save(); toast("Details saved"); }
   else if (el.dataset.delm) { S.meas = S.meas.filter(x => x.d !== el.dataset.delm); save(); route(); }
   else if (el.id === "exp") {
     const txt = JSON.stringify(S); const name = "tone-backup-" + iso(today()) + ".json";
