@@ -150,6 +150,20 @@ details.note summary,details.card summary{cursor:pointer;list-style:none}
 details.note summary::-webkit-details-marker,details.card summary::-webkit-details-marker{display:none}
 details.card summary::after{content:" +";color:var(--accent)}
 details.card[open] summary::after{content:" −"}
+.calgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.calgrid .ch{text-align:center;font-size:.7rem;font-weight:600;color:var(--muted);padding:2px 0}
+.cell{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-height:62px;border-radius:10px;padding:5px 2px;text-decoration:none;color:var(--fg);border:2px solid transparent;min-width:0;overflow:hidden}
+.cell .dn{font-family:var(--display);font-weight:700;font-size:.95rem;line-height:1.1;text-align:center}
+.cell .dn i{display:block;font-style:normal;font-size:.58rem;font-weight:600;text-transform:uppercase;letter-spacing:.04em;opacity:.75}
+.cell .ic{font-size:.62rem;font-weight:600;color:var(--muted);line-height:1.2;margin-top:2px}
+.cell.gymcell .ic{color:var(--accent);font-size:.82rem;font-weight:700}
+.cell .mk{font-size:.7rem;line-height:1.2;color:var(--sage);font-weight:700}
+.cell.istoday{border-color:var(--accent)}
+.btn.light{background:#fff;color:var(--accent)}
+.mgroup{font-family:var(--display);font-weight:600;color:var(--accent);margin:12px 0 0;font-size:.92rem}
+.mv{text-align:right;white-space:nowrap}
+.delta{font-weight:700;font-size:.85rem}.delta.good{color:var(--sage)}.delta.bad{color:#b4364c}
+.recipe summary{line-height:1.4}
 [hidden]{display:none!important}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));background:var(--fg);color:#fff;padding:8px 14px;border-radius:10px;font-size:.88rem;z-index:30}
 </style>
@@ -157,54 +171,13 @@ details.card[open] summary::after{content:" −"}
 <body>
 <main class="wrap" id="app"></main>
 <nav class="bar" aria-label="App sections">
-  <a href="#today" data-nav="today"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/></svg>Today</a>
-  <a href="#cal" data-nav="cal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg>16 weeks</a>
+  <a href="#cal" data-nav="cal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18M8 14h2M14 14h2M8 17h2"/></svg>Calendar</a>
+  <a href="#today" data-nav="today"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Today</a>
   <a href="#measure" data-nav="measure"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="8" width="20" height="8" rx="2"/><path d="M6 8v4M10 8v3M14 8v4M18 8v3"/></svg>Measure</a>
   <a href="#cycle" data-nav="cycle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16"/></svg>Cycle</a>
   <a href="#overview" data-nav="overview"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>Overview</a>
   <a href="#food" data-nav="food"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 3v8a3 3 0 0 0 6 0V3M10 3v18M17 3c-2 2-2 6 0 8v10"/></svg>Food</a>
 </nav>
-<template id="foodtpl">
-    <h1>Food</h1>
-    <p><b>Eat 1,650–1,750 kcal and 100–115 g protein a day</b> to lose fat and keep your muscle. Expect about 0.25 kg a week. Your waist will shrink faster than the scale.</p>
-    <div class="card"><h3>My protein foods</h3><ul class="clean">
-      <li>Chicken breast (air fryer, 15–18 min)</li>
-      <li>Salmon, including smoked</li>
-      <li>Lean ground beef, 2–3× a week, for iron</li>
-      <li>Eggs: scrambled, omelette, shakshuka</li>
-      <li>Lentils and chickpeas</li>
-      <li>Tofu</li>
-      <li>Skyr, Greek yogurt, cottage cheese</li>
-      <li>Protein powder (1 scoop ≈ 25 g)</li>
-    </ul></div>
-    <div class="card"><h3>Sample day</h3>
-      <div class="meal"><span class="m">Breakfast</span><span class="k">29 g · 420</span><small>Skyr + oats + berries + peanut butter</small></div>
-      <div class="meal"><span class="m">Lunch</span><span class="k">40 g · 550</span><small>Quinoa bowl: chicken breast, chickpeas, spinach, peppers, lemon</small></div>
-      <div class="meal"><span class="m">Snack</span><span class="k">25 g · 200</span><small>Protein shake + an orange</small></div>
-      <div class="meal"><span class="m">Dinner</span><span class="k">30 g · 550</span><small>Salmon, quinoa, roasted vegetables, plus your vitamin D tablet</small></div>
-      <div class="total"><span>Total</span><span>~124 g · ~1,720 kcal</span></div>
-    </div>
-    <div class="card"><h3>Dinner ideas (no rice)</h3><ul class="clean">
-      <li>Beef and lentil bolognese, the best iron meal</li>
-      <li>Salmon with quinoa and vegetables</li>
-      <li>Chickpea and tofu curry with spinach, on quinoa</li>
-      <li>Red lentil soup with chicken breast or an omelette</li>
-      <li>Chicken breast fajita bowl on quinoa</li>
-    </ul></div>
-    <div class="card"><h3>Iron</h3><ul class="clean">
-      <li>Eat lentils, chickpeas, tofu and spinach <b>with vitamin C</b> (peppers, orange, lemon, tomato).</li>
-      <li>Keep <b>tea, coffee and dairy</b> 1–2 h away from iron meals and your iron tablet.</li>
-      <li>Take the tablet with water or orange juice, e.g. mid-morning.</li>
-      <li>Eat a beef meal during and right after your period.</li>
-      <li>Recheck your ferritin after about 3 months.</li>
-    </ul></div>
-    <div class="card"><h3>Vitamin D</h3><ul class="clean">
-      <li>Take it with a meal that has <b>some fat</b>, like dinner.</li>
-      <li>Keep it at a different meal from your iron tablet.</li>
-      <li>Recheck it after about 3 months.</li>
-    </ul></div>
-    <div class="note good"><strong>Gym days:</strong> eat a meal with protein and carbs 1–3 hours before, and get 25–40 g of protein afterwards. A shake is easiest.</div>
-  </template>
 <script>
 const EX = {
   walk:{n:"Incline treadmill walk or bike",s:"Easy pace. You should be able to talk.",how:["Treadmill: set a 5–8% incline and 4.5–5.5 km/h. Bike: use easy resistance.","Walk without holding the handrails.","You should be able to talk the whole time. This just warms you up."],q:"incline treadmill walk warm up"},

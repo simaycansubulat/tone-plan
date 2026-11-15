@@ -1,7 +1,7 @@
 {
   "name": "Glute & Tone",
   "short_name": "Tone",
-  "start_url": "./#today",
+  "start_url": "./#cal",
   "scope": "./",
   "display": "standalone",
   "background_color": "#ffffff",

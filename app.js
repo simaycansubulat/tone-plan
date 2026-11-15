@@ -105,15 +105,28 @@ function dayMods(plan, week, ci) {
 }
 
 /* ---------- measurements ---------- */
+/* dir: -1 = going down is good, 1 = going up is good, 0 = neutral */
 const MEAS = [
-  { k: "weight", n: "Weight", u: "kg", how: "In the morning after the toilet, before eating or drinking, in underwear. Same scale, on a hard floor (not carpet)." },
-  { k: "waist", n: "Waist (narrowest)", u: "cm", how: "Find the narrowest part of your torso, usually 2–3 cm above the belly button. Breathe out normally and measure at the end of the breath. Don't suck in. This tracks your small waist." },
-  { k: "belly", n: "Belly (at the belly button)", u: "cm", how: "Tape straight across your belly button, level all the way round. Relaxed, after a normal breath out. This tracks belly fat." },
-  { k: "highhip", n: "Love handles (top of hip bones)", u: "cm", how: "Feel the bony ridge of your hip bones at your sides, about 5 cm below the belly button. Measure around your body at that height. This tracks love handles." },
-  { k: "hips", n: "Hips (fullest part of glutes)", u: "cm", how: "Feet together. Stand side-on to a mirror and wrap the tape around the fullest part of your glutes, level all the way round. This one should stay the same or go UP as your glutes grow." },
-  { k: "thigh", n: "Upper thigh (right)", u: "cm", how: "Stand with weight on both feet, leg relaxed. Measure the widest part of the right thigh, just below the glute crease. Tracks slim legs." },
-  { k: "arm", n: "Upper arm (right)", u: "cm", how: "Right arm hanging relaxed by your side. Measure halfway between the tip of your shoulder and your elbow. Tracks slimmer arms." }
+  { g: "Body", k: "weight", n: "Weight", u: "kg", dir: 0, how: "Morning, after the toilet, before eating or drinking, in underwear. Same scale every time, on a hard floor (not carpet). Weight alone can mislead: muscle replaces fat, so trust the tape more." },
+  { g: "Upper body", k: "bust", n: "Bust (fullest point)", u: "cm", dir: 0, how: "Wear a thin non-padded bra or nothing. Arms down. Tape around the fullest part of the bust and straight across the back. Don't squash." },
+  { g: "Upper body", k: "ribcage", n: "Under the bust (ribcage)", u: "cm", dir: -1, how: "Directly under the bust, where a bra band sits. Tape level all the way round, breathe out normally." },
+  { g: "Waist & belly", k: "waist", n: "Waist (narrowest point)", u: "cm", dir: -1, how: "Bend to one side: the crease that forms is your natural waist, usually 2–3 cm above the belly button. Stand straight, breathe out normally and measure at the end of the breath. Don't suck in. This tracks your small waist." },
+  { g: "Waist & belly", k: "navel", n: "Belly button", u: "cm", dir: -1, how: "Tape straight across the middle of your belly button, level all the way round your back. Relaxed belly, after a normal breath out. This is your main belly-fat number." },
+  { g: "Waist & belly", k: "lowbelly", n: "Lower belly", u: "cm", dir: -1, how: "Measure about 5 cm (three fingers) below the belly button, level all the way round. Tracks the lower belly 'pouch'." },
+  { g: "Waist & belly", k: "highhip", n: "Love handles (top of hip bones)", u: "cm", dir: -1, how: "Put your hands on your hips and feel the bony ridge at the top. Measure all the way round at that height, over the soft area at your sides. Tracks love handles." },
+  { g: "Hips & glutes", k: "hipdip", n: "Hip-dip line", u: "cm", dir: 1, how: "Feel the bony bump at the side of your upper thigh (the top of the thigh bone), roughly level with the bottom of your pubic bone. Measure all the way round at that height, feet together. As your side glutes grow, this should go UP." },
+  { g: "Hips & glutes", k: "hips", n: "Hips (fullest part of glutes)", u: "cm", dir: 1, how: "Feet together. Stand side-on to a mirror and move the tape up and down until you find the fullest part of your glutes. Keep it level all the way round. This should go UP or stay the same as your glutes grow." },
+  { g: "Legs", k: "thighTopR", n: "Inner/upper thigh, right (highest point)", u: "cm", dir: -1, how: "Stand with feet hip-width apart and weight on both legs, muscles relaxed. Slide the tape as high as it goes on the right thigh, right up into the groin and just under the glute crease. This tracks the inner thigh." },
+  { g: "Legs", k: "thighTopL", n: "Inner/upper thigh, left (highest point)", u: "cm", dir: -1, how: "Same as the right side, on the left leg. Comparing both sides shows if one leg is different." },
+  { g: "Legs", k: "midthigh", n: "Mid-thigh, right", u: "cm", dir: -1, how: "Halfway between the hip crease (front of the hip) and the top of the kneecap. Mark the spot with a pen the first time and measure the same place each time." },
+  { g: "Legs", k: "knee", n: "Above the knee, right", u: "cm", dir: -1, how: "Measure around the leg about 5 cm (three fingers) above the top of the kneecap, leg straight and relaxed." },
+  { g: "Legs", k: "calf", n: "Calf, right", u: "cm", dir: -1, how: "Stand with weight on both feet. Measure around the widest part of the calf." },
+  { g: "Arms", k: "armTop", n: "Upper arm, top (right)", u: "cm", dir: -1, how: "Arm hanging relaxed. Measure around the arm just below the armpit, as high as the tape goes. Tracks the soft back-of-arm area." },
+  { g: "Arms", k: "armMidR", n: "Upper arm, middle (right)", u: "cm", dir: -1, how: "Arm hanging relaxed. Measure halfway between the tip of your shoulder and your elbow. Don't flex." },
+  { g: "Arms", k: "armMidL", n: "Upper arm, middle (left)", u: "cm", dir: -1, how: "Same as the right side, on the left arm." }
 ];
+/* migrate old keys from the first version */
+S.meas.forEach(m => { if (m.belly != null && m.navel == null) { m.navel = m.belly; delete m.belly; } if (m.thigh != null && m.thighTopR == null) { m.thighTopR = m.thigh; delete m.thigh; } if (m.arm != null && m.armMidR == null) { m.armMidR = m.arm; delete m.arm; } });
 function measureDays() {
   const out = []; const st = parseD(S.start);
   for (let i = 0; i < PROGRAM_DAYS; i++) {
@@ -127,7 +140,8 @@ function measureDays() {
 function isMeasureDay(dIso) { return measureDays().includes(dIso); }
 function measForm(dIso, prefix) {
   const cur = S.meas.find(m => m.d === dIso) || {};
-  return `<div class="mgrid">${MEAS.map(m => `<label class="field">${esc(m.n)} (${m.u})<input type="number" inputmode="decimal" step="${m.k === "weight" ? "0.1" : "0.5"}" id="${prefix}-${m.k}" value="${cur[m.k] != null ? esc(cur[m.k]) : ""}"></label>`).join("")}</div>
+  const groups = [...new Set(MEAS.map(m => m.g))];
+  return groups.map(g => `<div class="mgroup">${esc(g)}</div><div class="mgrid">${MEAS.filter(m => m.g === g).map(m => `<label class="field">${esc(m.n)} (${m.u})<input type="number" inputmode="decimal" step="${m.k === "weight" ? "0.1" : "0.5"}" id="${prefix}-${m.k}" value="${cur[m.k] != null ? esc(cur[m.k]) : ""}"></label>`).join("")}</div>`).join("") + `
   <button type="button" class="btn" data-msave="${dIso}" data-prefix="${prefix}" style="margin-top:10px">Save measurements</button>`;
 }
 
@@ -246,39 +260,55 @@ function viewDay(dateIso) {
   ${brace}${blocks}`;
 }
 function viewCalendar() {
-  const st = parseD(S.start); const t = iso(today()); const md = measureDays();
-  let html = `<h1>16 weeks</h1><p class="small">${esc(fmtY(st))} – ${esc(fmtY(addD(st, PROGRAM_DAYS - 1)))}. Tap any day to open it. Colours show your cycle phase; 📏 marks measurement days.</p>
-  <div class="legend"><span class="chip ph-period">Period</span><span class="chip ph-foll">Strong</span><span class="chip ph-ovu">Ovulation</span><span class="chip ph-lut">Luteal</span><span class="chip ph-late">Pre-period</span></div>`;
+  const st = parseD(S.start); const t = today(); const tI = iso(t); const md = measureDays();
+  const ref = inProgram(t) ? t : (t < st ? st : addD(st, PROGRAM_DAYS - 1));
+  const wk = progWeek(ref); const b = blockOf(wk); const plan = PLAN[DOWKEY[ref.getDay()]]; const ci = cycleAt(ref);
+  const nextM = md.find(d => d >= tI);
+  let html = `<div class="hero"><div class="small" style="color:#fff;opacity:.92">${t < st ? "Starts " + esc(fmt(st)) : esc(fmt(ref))} · Week ${wk} of 16 · ${esc(b.name)}</div><h1>${esc(plan.t)}</h1><div class="sub">${esc(plan.s)}</div>${ci ? `<div style="margin-top:8px"><span class="chip ph-${ci.k}">Cycle day ${ci.day} · ${esc(ci.ph.n)}</span></div>` : ""}<a class="btn light" href="#d-${iso(ref)}" style="margin-top:10px">Open ${t < st ? "day 1" : "today"} →</a></div>
+  ${nextM ? `<p class="small" style="margin-top:8px">📏 Next measurement: <b>${esc(fmt(parseD(nextM)))}</b></p>` : ""}
+  <div class="legend"><span class="chip ph-period">Period</span><span class="chip ph-foll">Strong</span><span class="chip ph-ovu">Ovulation</span><span class="chip ph-lut">Luteal</span><span class="chip ph-late">Pre-period</span></div>
+  <p class="small">A, B, C = gym days · 📏 = measure · ✓ = done. Tap a day to open it.</p>`;
   let curBlock = "";
   for (let w = 0; w < 16; w++) {
-    const b = blockOf(w + 1);
-    if (b.name !== curBlock) { curBlock = b.name; html += `<h2>${esc(b.name)} · week${b.w[0] === b.w[1] ? " " + b.w[0] : "s " + b.w[0] + "–" + b.w[1]}</h2><p class="small">${esc(b.note)}</p>`; }
-    html += `<div class="list"><div class="li wk"><b>Week ${w + 1}</b><span class="small">${esc(fmt(addD(st, w * 7)))} – ${esc(fmt(addD(st, w * 7 + 6)))}</span></div>`;
-    for (let i = 0; i < 7; i++) {
-      const d = addD(st, w * 7 + i); const dI = iso(d); const plan = PLAN[DOWKEY[d.getDay()]]; const ci = cycleAt(d); const pr = countProgress(dI);
-      const status = pr.done === 0 ? "" : (pr.done >= pr.total ? "✓" : `${pr.done}/${pr.total}`);
-      html += `<a href="#d-${dI}" class="${dI === t ? "istoday" : ""}"><span class="cal"><span class="dot ph-${ci ? ci.k : "none"}" title="${ci ? esc(ci.ph.n) : ""}"></span><span><b>${esc(fmt(d))}</b>${md.includes(dI) ? " 📏" : ""}<br><span class="small ${plan.gym ? "gymtxt" : ""}">${esc(plan.t.replace(/^\w+ · /, "").replace(/^(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)$/, plan.s.split(" · ")[0] + " · " + plan.s.split(" · ")[1]))}</span>${ci ? ` <span class="small">· day ${ci.day}</span>` : ""}</span></span><span class="stat">${status}</span></a>`;
+    const bl = blockOf(w + 1);
+    if (bl.name !== curBlock) {
+      if (curBlock) html += `</div>`;
+      curBlock = bl.name;
+      html += `<h2>${esc(bl.name)} <span class="small">· week${bl.w[0] === bl.w[1] ? " " + bl.w[0] : "s " + bl.w[0] + "–" + bl.w[1]}</span></h2><div class="calgrid"><div class="ch">M</div><div class="ch">T</div><div class="ch">W</div><div class="ch">T</div><div class="ch">F</div><div class="ch">S</div><div class="ch">S</div>`;
     }
-    html += `</div>`;
+    for (let i = 0; i < 7; i++) {
+      const d = addD(st, w * 7 + i); const dI = iso(d); const p = PLAN[DOWKEY[d.getDay()]]; const c = cycleAt(d); const pr = countProgress(dI);
+      const letter = p.gym ? p.t.slice(-1) : (p.dow === 4 ? "rest" : (p.dow === 6 ? "yoga" : "split"));
+      const done = pr.total && pr.done >= pr.total;
+      const mon = d.getDate() === 1 || (w === 0 && i === 0) ? d.toLocaleDateString("en-GB", { month: "short" }) : "";
+      html += `<a href="#d-${dI}" class="cell ph-${c ? c.k : "none"}${dI === tI ? " istoday" : ""}${p.gym ? " gymcell" : ""}" aria-label="${esc(fmt(d))}, ${esc(p.t)}${c ? ", cycle day " + c.day : ""}"><span class="dn">${d.getDate()}${mon ? `<i>${esc(mon)}</i>` : ""}</span><span class="ic">${esc(letter)}</span><span class="mk">${md.includes(dI) ? "📏" : ""}${done ? "✓" : (pr.done ? "•" : "")}</span></a>`;
+    }
   }
+  html += `</div>`;
   return html;
 }
 function viewMeasure() {
   const md = measureDays(); const t = iso(today()); const next = md.find(d => d >= t);
-  const m = [...S.meas].sort((a, b) => a.d < b.d ? -1 : 1); const first = m[0] || {}; const latest = m[m.length - 1] || {};
-  const diff = k => (first[k] != null && latest[k] != null && m.length > 1) ? ((latest[k] - first[k]) > 0 ? "+" : "") + (Math.round((latest[k] - first[k]) * 10) / 10) : "";
-  const sched = md.map((d, i) => { const did = S.meas.some(x => x.d === d); const ci = cycleAt(parseD(d)); return `<a href="#d-${d}"><span><b>${i === 0 ? "Start" : "Check " + i}</b> · ${esc(fmt(parseD(d)))}<br><span class="small">${ci ? "Cycle day " + ci.day : ""}${i === 0 ? " · your starting point" : " · right after your period: least water retention"}</span></span><span class="stat">${did ? "✓" : (d < t ? "missed" : "")}</span></a>`; }).join("");
-  const short = { weight: "kg", waist: "waist", belly: "belly", highhip: "love h.", hips: "hips", thigh: "thigh", arm: "arm" };
+  const m = [...S.meas].sort((a, b) => a.d < b.d ? -1 : 1);
+  const firstOf = k => { const r = m.find(x => x[k] != null); return r ? r[k] : null; };
+  const lastOf = k => { const r = [...m].reverse().find(x => x[k] != null); return r ? r[k] : null; };
+  const cards = MEAS.map(x => {
+    const f = firstOf(x.k), l = lastOf(x.k); if (f == null) return "";
+    const ch = Math.round((l - f) * 10) / 10; const good = x.dir === 0 || ch === 0 ? "" : ((ch * x.dir) > 0 ? "good" : "bad");
+    return `<div class="li"><span>${esc(x.n)}</span><span class="mv"><span class="small">${esc(f)} → </span><b>${esc(l)} ${esc(x.u)}</b> <span class="delta ${good}">${m.length > 1 ? (ch > 0 ? "+" : "") + ch : ""}</span></span></div>`;
+  }).join("");
+  const sched = md.map((d, i) => { const did = S.meas.some(x => x.d === d); const ci = cycleAt(parseD(d)); return `<a href="#d-${d}"><span><b>${i === 0 ? "Start" : "Check " + i}</b> · ${esc(fmt(parseD(d)))}<br><span class="small">${ci ? "Cycle day " + ci.day : ""}${i === 0 ? " · your starting point" : " · just after your period, least water retention"}</span></span><span class="stat">${did ? "✓" : (d < t ? "missed" : "")}</span></a>`; }).join("");
   const rows = m.slice().reverse().map(r => `<tr><td>${esc(fmt(parseD(r.d)))}</td>${MEAS.map(c => `<td>${r[c.k] != null ? esc(r[c.k]) : "–"}</td>`).join("")}<td><button type="button" class="btn ghost" style="padding:2px 8px" data-delm="${r.d}" aria-label="Delete ${esc(r.d)}">✕</button></td></tr>`).join("");
+  const groups = [...new Set(MEAS.map(x => x.g))];
   return `<h1>Measurements</h1>
-  <div class="card"><div class="small">Next measurement</div><div style="font-family:var(--display);font-size:1.3rem;font-weight:700;color:var(--accent)">${next ? esc(fmt(parseD(next))) : "All done!"}</div><p class="small" style="margin:4px 0 0">Measurement days are timed to cycle day 7, just after your period, when water retention is lowest. That way every check compares fairly. If you log a period on a different date, these days move automatically.</p></div>
+  <div class="card"><div class="small">Next measurement</div><div style="font-family:var(--display);font-size:1.3rem;font-weight:700;color:var(--accent)">${next ? esc(fmt(parseD(next))) : "All done!"}</div><p class="small" style="margin:4px 0 0">Measurement days fall on cycle day 7, just after your period, when water retention is lowest, so every check compares fairly. If you log a period on a different date, they move automatically.</p></div>
+  <h2>My progress</h2>${cards ? `<div class="list">${cards}</div><p class="small">Green = moving the way you want. Waist, belly, love handles, thighs and arms should go down; hips and the hip-dip line should go up or stay the same.</p>` : `<p class="small">No measurements yet. Your first one is on ${esc(fmt(parseD(md[0])))}.</p>`}
   <h2>Schedule</h2><div class="list">${sched}</div>
-  <h2>Progress</h2>${m.length ? `<div class="card scroll"><table class="tbl"><thead><tr><th>Date</th>${MEAS.map(c => `<th>${short[c.k]}</th>`).join("")}<th></th></tr></thead><tbody>${m.length > 1 ? `<tr style="font-weight:600;color:var(--accent)"><td>Change</td>${MEAS.map(c => `<td>${esc(diff(c.k))}</td>`).join("")}<td></td></tr>` : ""}${rows}</tbody></table></div>
-  <p class="small">Working well looks like: waist, belly, love handles, thigh and arm going down; hips staying the same or going up. Starting weight: ${esc(S.profile.startWeight)} kg.</p>` : `<p class="small">No measurements yet. Your first one is on ${esc(fmt(parseD(md[0])))}.</p>`}
-  <h2>Add or edit measurements</h2><div class="card"><label class="field" style="max-width:200px">Date<input type="date" id="mdate" value="${esc(next && next === t ? t : t)}"></label>${measForm("__pick__", "mm")}</div>
+  <h2>Add or edit measurements</h2><div class="card"><label class="field" style="max-width:200px">Date<input type="date" id="mdate" value="${esc(t)}"></label><p class="small" style="margin:6px 0 0">Leave a box empty if you skip it. Choosing a date you already saved loads those numbers so you can fix them.</p>${measForm("__pick__", "mm")}</div>
   <h2>How to measure</h2>
-  <div class="note accent"><strong>Rules for every check</strong><ul><li>Morning, after the toilet, before eating or drinking.</li><li>Underwear only, standing relaxed, feet together, looking straight ahead.</li><li>Soft tape measure, snug on the skin but not pressing in.</li><li>Keep the tape level all the way round. Check in a mirror.</li><li>Measure each spot twice. If they differ by more than 0.5 cm, do a third and use the middle number.</li><li>Always the right side for thigh and arm.</li><li>Take photos the same day: front, side and back, same light, outfit and distance.</li></ul></div>
-  ${MEAS.map(x => `<details class="card"><summary><b>${esc(x.n)}</b></summary><p style="margin:8px 0 0">${esc(x.how)}</p></details>`).join("")}`;
+  <div class="note accent"><strong>Rules for every check</strong><ul><li>Morning, after the toilet, before eating or drinking.</li><li>Underwear only, standing relaxed, feet together, looking straight ahead.</li><li>Soft tape measure, snug on the skin but not pressing in.</li><li>Keep the tape level all the way round. Check in a mirror, or ask someone to help with the back.</li><li>Measure each spot twice. If they differ by more than 0.5 cm, do a third and use the middle number.</li><li>The first time, mark tricky spots (mid-thigh, above the knee) with a pen and note the distance from a landmark, so you measure the same place every time.</li><li>Photos the same day: front, side and back, same light, outfit and distance.</li></ul></div>
+  ${groups.map(g => `<h3 style="margin-top:14px">${esc(g)}</h3>` + MEAS.filter(x => x.g === g).map(x => `<details class="card"><summary><b>${esc(x.n)}</b></summary><p style="margin:8px 0 0">${esc(x.how)}</p></details>`).join("")).join("")}
+  <h2>All entries</h2>${m.length ? `<div class="card scroll"><table class="tbl"><thead><tr><th>Date</th>${MEAS.map(c => `<th>${esc(c.n.split(" (")[0])}</th>`).join("")}<th></th></tr></thead><tbody>${rows}</tbody></table></div>` : `<p class="small">Nothing saved yet.</p>`}`;
 }
 function viewCycle() {
   const t = today(); const ci = cycleAt(t); const len = cycleLen(); let body = "";
@@ -312,22 +342,85 @@ function viewOverview() {
   <div class="row"><button type="button" class="btn" id="exp">Save a backup</button><label class="btn ghost" for="imp">Restore a backup</label><input type="file" id="imp" accept="application/json,.json" hidden></div>
   <p class="small" style="margin-top:20px">General guidance, not medical advice. Follow your doctor's dosing for iron and vitamin D. If back pain keeps coming back, see a physiotherapist.</p>`;
 }
-function viewFood() { return document.getElementById("foodtpl").innerHTML; }
+/* ---------- food ---------- */
+const RECIPES = {
+  "Breakfasts": [
+    { n: "Overnight protein oats", p: 28, k: 400, t: "5 min, the night before", ing: ["40 g oats", "150 g skyr or Greek yogurt", "100 ml milk", "1 tsp chia seeds", "Handful of berries", "Cinnamon"], how: ["Mix oats, skyr, milk, chia and cinnamon in a jar.", "Leave in the fridge overnight.", "Top with berries in the morning."], tip: "Dairy breakfast: take your iron tablet at a different time." },
+    { n: "Menemen (Turkish eggs with peppers)", p: 22, k: 380, t: "15 min", ing: ["2 eggs + 1 egg white", "1 green pepper, 1 red pepper", "2 tomatoes (or ½ can)", "1 tsp olive oil", "Pul biber, salt", "1 slice wholegrain bread"], how: ["Soften chopped peppers in the oil for 5 min.", "Add chopped tomatoes and cook until saucy.", "Stir in the eggs gently until just set.", "Serve with the bread."], tip: "Peppers and tomatoes are full of vitamin C, which helps you absorb iron." },
+    { n: "Spinach & feta omelette", p: 28, k: 380, t: "10 min", ing: ["2 eggs + 2 egg whites", "Big handful of spinach", "20 g feta", "1 slice wholegrain toast"], how: ["Wilt the spinach in a pan.", "Pour over the beaten eggs and cook on low.", "Add the feta, fold and serve with toast."] },
+    { n: "Banana protein pancakes", p: 32, k: 420, t: "15 min", ing: ["1 ripe banana", "2 eggs", "30 g oats", "½ scoop protein powder", "100 g Greek yogurt to top", "Berries"], how: ["Blend banana, eggs, oats and protein powder.", "Cook small pancakes in a non-stick pan, 1–2 min per side.", "Top with yogurt and berries."] },
+    { n: "Smoked salmon rye toast", p: 25, k: 360, t: "5 min", ing: ["2 slices rye bread", "60 g smoked salmon", "50 g cottage cheese", "Cucumber, dill, lemon"], how: ["Spread cottage cheese on the rye.", "Top with salmon, cucumber, dill and lemon."], tip: "Salmon gives you some vitamin D." }
+  ],
+  "Lunches": [
+    { n: "Chicken quinoa bowl", p: 40, k: 550, t: "10 min with meal prep", ing: ["100 g cooked chicken breast", "120 g cooked quinoa", "80 g chickpeas", "Spinach, peppers, cucumber", "Lemon + 1 tsp olive oil"], how: ["Put everything in a bowl.", "Dress with lemon and olive oil, salt and pepper."] },
+    { n: "Lentil, feta & herb salad", p: 30, k: 480, t: "10 min", ing: ["150 g cooked green or brown lentils", "Cucumber, tomato, red onion, parsley", "30 g feta", "80 g chicken breast (optional)", "Lemon, olive oil, sumac"], how: ["Chop the vegetables and herbs.", "Mix with lentils and feta.", "Dress with lemon, a little oil and sumac."], tip: "Iron-rich, and the lemon and tomato help absorb it." },
+    { n: "Mercimek çorbası + side", p: 28, k: 480, t: "30 min, makes 4", ing: ["200 g red lentils", "1 onion, 1 carrot", "1 tbsp tomato paste", "1.2 L stock", "Cumin, paprika, lemon", "Side: 2-egg omelette or 100 g chicken"], how: ["Soften onion and carrot, add tomato paste and spices.", "Add lentils and stock, simmer 20 min.", "Blend smooth, finish with lemon.", "One bowl is ~13 g protein, so add the omelette or chicken on the side."] },
+    { n: "Salmon, quinoa & avocado salad", p: 30, k: 520, t: "15 min", ing: ["100 g cooked salmon", "100 g cooked quinoa", "¼ avocado", "Spinach, cucumber, cherry tomatoes", "Lemon"], how: ["Flake the salmon over quinoa and greens.", "Add avocado and tomatoes, squeeze lemon over."] },
+    { n: "Chickpea smash wrap", p: 35, k: 480, t: "10 min", ing: ["100 g chickpeas", "50 g Greek yogurt", "Lemon, mustard, chopped celery or pickles", "80 g chicken breast", "1 wholegrain wrap, spinach"], how: ["Mash chickpeas with yogurt, lemon and mustard.", "Fill the wrap with the smash, chicken and spinach."] }
+  ],
+  "Dinners": [
+    { n: "Beef & lentil bolognese", p: 35, k: 560, t: "30 min, makes 4", ing: ["500 g 5% beef mince", "120 g red lentils", "1 onion, 2 garlic cloves, 1 carrot", "2 cans chopped tomatoes", "Italian herbs", "Wholewheat pasta or quinoa (60 g dry per portion)"], how: ["Brown the beef with onion, garlic and carrot.", "Add lentils, tomatoes, herbs and 300 ml water.", "Simmer 20 min until the lentils are soft.", "Serve over pasta or quinoa."], tip: "Your best iron meal. Have it during and right after your period." },
+    { n: "Etli nohut (beef & chickpea stew)", p: 35, k: 550, t: "40 min, makes 4", ing: ["400 g lean beef, cubed", "2 cans chickpeas", "1 onion, 2 tbsp tomato paste", "1 pepper", "Cumin, paprika", "Quinoa to serve"], how: ["Brown the beef with onion.", "Add tomato paste, pepper, spices and water to cover.", "Simmer 25 min, add chickpeas, cook 10 more.", "Serve with quinoa and a salad."], tip: "Beef + chickpeas = lots of iron." },
+    { n: "Air-fryer salmon & quinoa", p: 30, k: 550, t: "15 min", ing: ["120 g salmon fillet", "120 g cooked quinoa", "Broccoli, peppers", "Lemon, garlic, dill"], how: ["Season salmon with lemon, garlic and dill.", "Air fry at 200°C for 10–12 min with the vegetables.", "Serve on quinoa. Take your vitamin D with this meal."] },
+    { n: "Baked köfte with cacık", p: 32, k: 500, t: "30 min", ing: ["125 g 5% beef mince", "½ grated onion, parsley, cumin", "Peppers, courgette, tomato", "Cacık: 150 g yogurt, cucumber, garlic, mint"], how: ["Mix mince with onion, parsley and cumin; shape small köfte.", "Bake with the vegetables at 200°C for 20 min.", "Serve with cacık."] },
+    { n: "Chickpea & tofu spinach curry", p: 28, k: 520, t: "25 min", ing: ["150 g firm tofu, cubed", "100 g chickpeas", "Big handful of spinach", "½ can chopped tomatoes", "Curry paste or garam masala, garlic, ginger", "100 g cooked quinoa"], how: ["Crisp the tofu in the air fryer or a pan.", "Cook garlic, ginger and spices, add tomatoes and chickpeas.", "Stir in spinach and tofu. Squeeze lemon on top for vitamin C.", "Serve on quinoa."] },
+    { n: "Chicken fajita quinoa bowl", p: 38, k: 540, t: "20 min", ing: ["130 g chicken breast, sliced", "Peppers, onion", "Fajita spice", "100 g cooked quinoa", "Salsa, 2 tbsp Greek yogurt"], how: ["Toss chicken and peppers in the spice.", "Pan-fry or air fry for 12–15 min.", "Serve on quinoa with salsa and yogurt."] },
+    { n: "Sheet-pan lemon chicken & chickpeas", p: 40, k: 520, t: "30 min", ing: ["130 g chicken breast", "100 g chickpeas", "Red onion, peppers, courgette", "Lemon, garlic, oregano, 1 tsp olive oil"], how: ["Put everything on a tray with lemon, garlic, oregano and oil.", "Roast at 200°C for 25 min."] }
+  ],
+  "Snacks (100–300 kcal)": [
+    { n: "Greek yogurt + berries", p: 15, k: 150, ing: ["150 g Greek yogurt or skyr", "Berries"] },
+    { n: "Protein shake + fruit", p: 25, k: 200, ing: ["1 scoop protein powder in water", "An orange or apple"] },
+    { n: "Green protein smoothie", p: 30, k: 280, ing: ["1 scoop protein powder", "1 small banana", "Handful of spinach", "200 ml milk"] },
+    { n: "Cottage cheese + cucumber or pineapple", p: 14, k: 140, ing: ["120 g cottage cheese", "Cucumber or pineapple"] },
+    { n: "Crispy roasted chickpeas", p: 7, k: 150, ing: ["100 g chickpeas", "Paprika, salt", "Air fry 200°C 12 min"] },
+    { n: "Egg muffin bites (2)", p: 12, k: 150, ing: ["2 eggs, peppers, spinach", "Bake in muffin cups 180°C 18 min"] },
+    { n: "Hummus + veg sticks", p: 6, k: 180, ing: ["3 tbsp hummus", "Carrot, cucumber, pepper sticks"] },
+    { n: "Sweet craving", p: 4, k: 150, ing: ["2 squares dark chocolate (70%+)", "10 almonds"] }
+  ]
+};
+function recipeHTML(r) {
+  return `<details class="card recipe"><summary><b>${esc(r.n)}</b><span class="small"> · ${r.p} g protein · ${r.k} kcal${r.t ? " · " + esc(r.t) : ""}</span></summary>
+  <ul class="clean" style="margin-top:8px">${r.ing.map(i => `<li>${esc(i)}</li>`).join("")}</ul>${r.how ? `<ol class="clean">${r.how.map(i => `<li>${esc(i)}</li>`).join("")}</ol>` : ""}${r.tip ? `<p class="small" style="color:var(--sage);margin:0">${esc(r.tip)}</p>` : ""}</details>`;
+}
+function viewFood() {
+  return `<h1>Food</h1>
+  <p><b>Every day: 1,650–1,750 kcal and 100–115 g protein.</b> Expect about 0.25 kg fat loss a week; your waist shrinks faster than the scale.</p>
+  <div class="stats"><div class="stat"><b>100–115 g</b><span>protein</span></div><div class="stat"><b>~170 g</b><span>carbs</span></div><div class="stat"><b>50–60 g</b><span>fat</span></div></div>
+  <h2>Build every plate</h2><div class="soft"><ul class="clean"><li><b>½ plate vegetables</b> (salad, peppers, broccoli, spinach)</li><li><b>¼ plate protein</b>, about your palm: chicken breast, salmon, lean beef, eggs, tofu, lentils</li><li><b>¼ plate carbs</b>, about a cupped hand: quinoa, wholewheat pasta, potatoes, wholegrain bread, oats</li><li><b>1 thumb of fat</b>: olive oil, avocado, nuts, feta</li></ul></div>
+  <h2>A typical day</h2><div class="card">
+    <div class="meal"><span class="m">Breakfast</span><span class="k">~30 g · 400</span><small>Pick one breakfast below</small></div>
+    <div class="meal"><span class="m">Lunch</span><span class="k">~35 g · 500</span><small>Pick one lunch</small></div>
+    <div class="meal"><span class="m">Snack</span><span class="k">~20 g · 200</span><small>Pick one snack</small></div>
+    <div class="meal"><span class="m">Dinner</span><span class="k">~33 g · 550</span><small>Pick one dinner</small></div>
+    <div class="total"><span>Total</span><span>~118 g · ~1,650–1,750 kcal</span></div></div>
+  ${Object.entries(RECIPES).map(([g, list]) => `<h2>${esc(g)}</h2>${list.map(recipeHTML).join("")}`).join("")}
+  <h2>Sunday meal prep (45 min)</h2><div class="card"><ol class="clean"><li>Bake 600 g chicken breast: 200°C for 18–20 min (see the tips below).</li><li>Cook 250 g dry quinoa (makes about 4 portions).</li><li>Make a big pot of bolognese, etli nohut or lentil soup and freeze some.</li><li>Chop peppers, cucumber and carrots into boxes.</li><li>Make a jar of dressing (lemon, olive oil, mustard) and a bowl of cacık.</li></ol><p class="small" style="margin:0">Keeps 4 days in the fridge. Your lunches are then 5 minutes.</p></div>
+  <h2>Juicy chicken breast, every time</h2><div class="card"><ul class="clean"><li><b>Quick brine:</b> 15 min in water with 1 tbsp salt per litre. Pat dry.</li><li><b>Air fryer:</b> 200°C, 15–18 min, turn halfway. <b>Oven:</b> 200°C, 18–22 min.</li><li>Let it rest 5 min before cutting.</li><li><b>Marinades:</b> yogurt + lemon + garlic + paprika · olive oil + oregano + lemon · tomato paste + pul biber + cumin · soy sauce + honey + ginger (small amount).</li></ul></div>
+  <h2>Your shopping list</h2><div class="card"><ul class="clean"><li><b>Protein:</b> chicken breast, salmon, 5% beef mince, eggs, firm tofu, skyr / Greek yogurt, cottage cheese, feta, protein powder</li><li><b>Legumes:</b> red and green lentils, canned chickpeas, hummus</li><li><b>Carbs:</b> quinoa, oats, wholegrain or rye bread, wholewheat pasta, potatoes, wraps</li><li><b>Vegetables:</b> spinach, peppers, tomatoes, cucumber, broccoli, courgette, onion, garlic, carrots</li><li><b>Fruit:</b> berries (frozen are fine), oranges, kiwis, bananas, lemons</li><li><b>Extras:</b> olive oil, tomato paste, cans of tomatoes, spices (cumin, paprika, pul biber, oregano), dark chocolate, almonds, chia</li></ul></div>
+  <h2>Iron</h2><div class="card"><ul class="clean"><li>Eat lentils, chickpeas, tofu and spinach <b>with vitamin C</b>: peppers, tomato, orange, kiwi, lemon.</li><li>Keep <b>tea, coffee and dairy</b> 1–2 hours away from iron meals and your iron tablet.</li><li>Take the tablet with water or orange juice, e.g. mid-morning.</li><li>Have a beef meal during and right after your period.</li><li>Recheck ferritin with your doctor after about 3 months.</li></ul></div>
+  <h2>Vitamin D</h2><div class="card"><ul class="clean"><li>Take it with a meal that has <b>some fat</b>, like dinner with salmon or olive oil.</li><li>Keep it at a different meal from your iron tablet.</li><li>Recheck after about 3 months.</li></ul></div>
+  <h2>Around your cycle</h2><div class="card"><ul class="clean"><li><b>Period:</b> iron meals (bolognese, etli nohut, lentil salad). Warm soups help cramps.</li><li><b>Before your period:</b> hunger goes up, so add 100–150 kcal (yogurt + berries, a shake). Salty food makes bloating worse.</li><li><b>Cravings:</b> 2 squares of dark chocolate, a protein smoothie, or Greek yogurt with honey and cinnamon.</li></ul></div>
+  <h2>Gym days</h2><div class="note good"><strong>Before:</strong> a meal with protein and carbs 1–3 hours earlier (e.g. overnight oats). <strong>After:</strong> 25–40 g protein (a shake or your next meal).</div>
+  <h2>Eating out</h2><div class="card"><ul class="clean"><li>Choose grilled chicken, köfte, salmon or a lentil dish.</li><li>Ask for sauce on the side, and swap rice or chips for salad or a small portion of bulgur/potatoes.</li><li>One meal out never ruins progress. Just go back to normal at the next meal.</li></ul></div>`;
+}
+
 
 /* ---------- router ---------- */
 function route() {
-  const h = (location.hash || "#today").slice(1); const app = document.getElementById("app"); let nav = h;
+  const h = (location.hash || "#cal").slice(1); const app = document.getElementById("app"); let nav = h;
   if (/^d-\d{4}-\d{2}-\d{2}$/.test(h)) { app.innerHTML = viewDay(h.slice(2)); nav = h.slice(2) === iso(today()) ? "today" : "cal"; }
-  else if (h === "cal") app.innerHTML = viewCalendar();
+  else if (h === "cal" || h === "") { app.innerHTML = viewCalendar(); nav = "cal"; }
+  else if (h === "today") { const st = parseD(S.start); app.innerHTML = (today() < st ? `<div class="note accent"><strong>Your 16 weeks start ${esc(fmt(st))}.</strong> Here's your first day.</div>` : "") + viewDay(iso(today() < st ? st : today())); }
   else if (h === "measure") app.innerHTML = viewMeasure();
   else if (h === "cycle") app.innerHTML = viewCycle();
   else if (h === "overview") app.innerHTML = viewOverview();
   else if (h === "food") app.innerHTML = viewFood();
-  else { const st = parseD(S.start); app.innerHTML = (today() < st ? `<div class="note accent"><strong>Your 16 weeks start ${esc(fmt(st))}.</strong> Here's your first day.</div>` : "") + viewDay(iso(today() < st ? st : today())); nav = "today"; }
+  else { app.innerHTML = viewCalendar(); nav = "cal"; }
   document.querySelectorAll("nav.bar a").forEach(a => { if (a.dataset.nav === nav) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
-  if (h === "cal") { const el = document.querySelector(".istoday"); if (el && el.scrollIntoView) setTimeout(() => el.scrollIntoView({ block: "center" }), 50); }
 }
-window.addEventListener("hashchange", () => { route(); if (location.hash !== "#cal") window.scrollTo(0, 0); });
+window.addEventListener("hashchange", () => { route(); window.scrollTo(0, 0); });
+/* the app always opens on the 16-week calendar */
+if (!/^#d-/.test(location.hash) && location.hash !== "#cal") { try { history.replaceState(null, "", "#cal"); } catch (e) { location.hash = "cal"; } }
 
 /* ---------- interactions ---------- */
 function currentDayIso() { const h = location.hash.slice(1); return /^d-/.test(h) ? h.slice(2) : iso(today()); }
