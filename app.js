@@ -69,6 +69,7 @@ Object.assign(EX, {
 });
 Object.assign(WORKS, { marchwarm: "Heart, whole body (warm-up)", sofahip: "Glute max (main); some hamstrings and gluteus medius", slbridge: "Glute max and gluteus medius (side glutes)", frogpump: "Glute max, especially with the knees turned out", sliderhc: "Hamstrings (back of the thighs) and glutes", kneepush: "Chest, triceps (back of the arms), core", bottlekick: "Triceps (back of the upper arm)", proneyt: "Middle and lower trapezius, rear shoulders (posture)" });
 Object.assign(TIPS, { sofahip: "Back: brace first, ribs down. Lock out with your glutes, not your lower back.", slbridge: "Back: ribs down and hips level.", sliderhc: "Back: keep your hips up and belly tight.", proneyt: "Posture: shoulders down away from your ears, chin slightly tucked.", kneepush: "Back: belly tight so your hips don't sag." });
+applyTR();
 Object.assign(VIDEOS, {
   sofahip: [YT("RR0oZhhUVWo", "Get Strong with Emily"), YT("PCzON8KAV1A", "at home · Casey Shipp")],
   slbridge: [YT("9bl48SV62u4", "Doctor Jo, physical therapist")],
@@ -101,12 +102,12 @@ function dayLabel(p) { return p.gym ? (p.home ? "Home " : "Gym ") + p.t.slice(-1
 
 /* ---------- 16-week progression ---------- */
 const BLOCKS = [
-  { w: [1, 2], name: "Learn", cap: 2, note: "Learn the moves: 2 sets of everything, light weights, 3–4 reps left in the tank. Watch the videos and focus on form." },
-  { w: [3, 4], name: "Foundation", note: "Full sets now. Weights that leave 2 reps in the tank. Write everything down." },
-  { w: [5, 8], name: "Build", note: "New this block: 4 sets of hip thrusts with a 2-second squeeze at the top, more reps on the mat exercises, and a weight on clamshells and donkey kicks." },
-  { w: [9, 9], name: "Easy week", cap: 2, note: "Recovery week: same weights as last week but only 2 sets. Your body gets stronger while it rests." },
-  { w: [10, 13], name: "Strength", note: "New this block: heavier weights with fewer reps on the glute machines and Romanian deadlifts. Add weight whenever the app tells you to." },
-  { w: [14, 16], name: "Shape", note: "New this block: higher reps with slow lowering (3 seconds down) for a full, rounded glute shape. Week 16 is your final check." }
+  { w: [1, 2], name: "Learn", cap: 2, note: "Hareketleri öğren: her hareketten 2 set, hafif ağırlık; set bittiğinde 3–4 tekrar daha yapabilecek gücün kalsın. Videoları izle ve forma odaklan." },
+  { w: [3, 4], name: "Foundation", note: "Artık tam setler. Set bittiğinde 2 tekrar daha yapabilecek gücün kalacak bir ağırlık seç. Her şeyi kaydet." },
+  { w: [5, 8], name: "Build", note: "Bu blokta yeni: hip thrust 4 set ve tepede 2 saniye sıkma, mat hareketlerinde daha fazla tekrar, clamshell ve donkey kick'e ağırlık." },
+  { w: [9, 9], name: "Easy week", cap: 2, note: "Hafif hafta: geçen haftayla aynı ağırlıklar ama sadece 2 set. Vücudun dinlenirken güçlenir." },
+  { w: [10, 13], name: "Strength", note: "Bu blokta yeni: kalça makinelerinde ve Romanian deadlift'te daha ağır, daha az tekrar. Uygulama söyledikçe ağırlık ekle." },
+  { w: [14, 16], name: "Shape", note: "Bu blokta yeni: dolgun, yuvarlak bir kalça için yavaş indirişle (3 saniye) daha yüksek tekrar. 16. hafta son ölçüm haftan." }
 ];
 const OVR = {
   Build: { htm: "4 × 10–12", bstance: "4 × 10–12 / side", smithrdl: "3 × 8–10", kickback: "3 × 15 / side", legcurl: "3 × 10–12", clamshell: "3 × 15 / side", donkey: "3 × 15 / side", deadbug: "3 × 10 / side", birddog: "3 × 8 / side", sideplank: "3 × 30–40s / side", curlup: "3 × 8 holds" },
@@ -114,9 +115,9 @@ const OVR = {
   Shape: { sofahip: "4 × 15–20", slbridge: "3 × 15 / side", frogpump: "3 × 25", sliderhc: "3 × 10–12", kneepush: "3 × 8–12", bottlekick: "3 × 15", proneyt: "3 × 10", htm: "4 × 12–15", slht: "3 × 12–15 / side", bstance: "3 × 12–15 / side", smithrdl: "3 × 10–12", kickback: "4 × 15 / side", legcurl: "3 × 12–15", clamshell: "3 × 20 / side", donkey: "3 × 20 / side", deadbug: "3 × 12 / side", birddog: "3 × 10 / side", sideplank: "3 × 40s / side", curlup: "3 × 10 holds" }
 };
 const BLOCKCUE = {
-  Build: { htm: "This block: squeeze 2 seconds at the top of every rep.", clamshell: "This block: rest a 2.5–5 kg plate on your top knee.", donkey: "This block: hold a light dumbbell behind your knee or use an ankle weight." },
-  Strength: { htm: "This block: heavier. Pick a weight where 6–10 reps is hard.", smithrdl: "This block: heavier, 4 sets of 8. Back flat, every rep.", sideplank: "This block: if it's pain-free, try it with straight legs." },
-  Shape: { sofahip: "This block: hold a backpack with books on your hips, 3 seconds down, 2-second squeeze.", slbridge: "This block: 3 seconds lowering.", htm: "This block: 3 seconds lowering + 2-second squeeze at the top.", smithrdl: "This block: 3 seconds on the way down.", slht: "This block: 3 seconds lowering.", bstance: "This block: 3 seconds lowering." }
+  Build: { htm: "Bu blok: her tekrarın tepesinde 2 saniye sık.", clamshell: "Bu blok: üstteki dizinin üstüne 2,5–5 kg'lık bir plaka koy.", donkey: "Bu blok: diz arkana hafif bir dambıl sıkıştır ya da ayak bileği ağırlığı kullan." },
+  Strength: { htm: "Bu blok: daha ağır. 6–10 tekrarın zor geldiği bir ağırlık seç.", smithrdl: "Bu blok: daha ağır, 4 set × 8. Her tekrarda sırt düz.", sideplank: "Bu blok: ağrı yoksa bacaklar düz dene." },
+  Shape: { sofahip: "Bu blok: kalçanın üstünde kitap dolu sırt çantası, 3 saniyede in, tepede 2 saniye sık.", slbridge: "Bu blok: 3 saniyede indir.", htm: "Bu blok: 3 saniyede indir + tepede 2 saniye sık.", smithrdl: "Bu blok: inerken 3 saniye.", slht: "Bu blok: 3 saniyede indir.", bstance: "Bu blok: 3 saniyede indir." }
 };
 const STEP = { htm: 5, slht: 5, bstance: 5, smithrdl: 5, legcurl: 2.5, kickback: 2.5, cablerow: 2.5, closerow: 2.5, pulldown: 2.5, pushdown: 2.5, chestpress: 2.5, facepull: 2.5, pullthrough: 2.5 };
 function blockOf(week) { return BLOCKS.find(b => week >= b.w[0] && week <= b.w[1]) || BLOCKS[BLOCKS.length - 1]; }
@@ -128,21 +129,21 @@ function dayMods(plan, week, ci) {
   if (ci) {
     const d = ci.day;
     if (ci.k === "period") {
-      food = "Iron day: have beef or lentils with vitamin C (peppers, orange). Keep tea and coffee away from it.";
-      if (plan.gym && d <= 2) { cap = Math.min(cap, 2); notes.push(`Period day ${d}: lighter session. 2 sets per exercise and about 20% lighter than last time. If you have bad cramps, do Saturday's yoga class instead.`); }
-      else if (plan.gym) notes.push(`Period day ${d}: normal sets. Go about 10% lighter if you feel low on energy.`);
-      else if (plan.split && d <= 2) notes.push(`Period day ${d}: be gentle. Swap the deep split stretches for the yoga class if you feel crampy.`);
-      else notes.push(`Period day ${d}: gentle movement helps cramps. Keep the walk easy.`);
+      food = "Demir günü: dana eti ya da mercimeği C vitamini ile ye (biber, portakal). Çay ve kahveyi bu öğünden uzak tut.";
+      if (plan.gym && d <= 2) { cap = Math.min(cap, 2); notes.push(`Regl ${d}. gün: hafif antrenman. Her hareketten 2 set ve geçen seferden yaklaşık %20 hafif. Krampların kötüyse onun yerine cumartesinin yoga dersini yap.`); }
+      else if (plan.gym) notes.push(`Regl ${d}. gün: normal setler. Enerjin düşükse yaklaşık %10 hafiflet.`);
+      else if (plan.split && d <= 2) notes.push(`Regl ${d}. gün: nazik ol. Krampın varsa derin split esnemeleri yerine yoga dersini yap.`);
+      else notes.push(`Regl ${d}. gün: hafif hareket kramplara iyi gelir. Yürüyüş rahat tempoda olsun.`);
     } else if (ci.k === "foll") {
-      notes.push(plan.gym ? "Strong phase: try 1 more rep or the next weight on hip thrusts and Romanian deadlifts today." : "High-energy phase: a good time to push your split stretch a little further, gently.");
+      notes.push(plan.gym ? "Güçlü dönem: bugün hip thrust ve Romanian deadlift'te 1 tekrar fazlasını ya da bir sonraki ağırlığı dene." : "Enerjinin yüksek olduğu dönem: split esnemende biraz daha ileri gitmek için iyi bir zaman, nazikçe.");
     } else if (ci.k === "ovu") {
-      notes.push(plan.gym ? "Around ovulation: you're strong, but joints can be looser. Warm up fully and control every rep." : "Around ovulation: joints can be looser, so stretch slowly and don't force the split.");
+      notes.push(plan.gym ? "Yumurtlama dönemi: güçlüsün ama eklemler daha gevşek olabilir. İyice ısın ve her tekrarı kontrol et." : "Yumurtlama dönemi: eklemler daha gevşek olabilir, yavaş esne ve split'i zorlama.");
     } else if (ci.k === "lut") {
-      notes.push(plan.gym ? "Luteal phase: keep the same weights and focus on clean form." : "Luteal phase: steady and calm. Keep your stretches the same as last time.");
-      food = "You may be hungrier now. Up to 100–150 extra kcal is fine; choose protein first.";
+      notes.push(plan.gym ? "Luteal faz: aynı ağırlıklarla devam et ve temiz forma odaklan." : "Luteal faz: sakin ve istikrarlı. Esnemelerin geçen seferle aynı kalsın.");
+      food = "Şu an daha aç olabilirsin. 100–150 kcal fazlası sorun değil; önce protein seç.";
     } else {
-      notes.push(plan.gym ? "Pre-period days: if you're tired, drop the last set of each exercise. That's completely fine." : "Pre-period days: you may feel stiffer and bloated. Gentle stretching only.");
-      food = "Bloating and 1–2 kg of water are normal now. Ignore the scale this week. Cravings? Greek yogurt with berries or a square of dark chocolate.";
+      notes.push(plan.gym ? "Regl öncesi günler: yorgunsan her hareketin son setini atla. Bu tamamen normal." : "Regl öncesi günler: daha tutuk ve şiş hissedebilirsin. Sadece hafif esneme.");
+      food = "Şişkinlik ve 1–2 kg su tutma şu an normal. Bu hafta tartıyı boşver. Canın tatlı mı çekiyor? Orman meyveli süzme yoğurt ya da bir kare bitter çikolata.";
     }
   }
   return { cap, notes, food, block: b };
@@ -214,14 +215,14 @@ function suggestKg(id, last, p, baseSR) {
   const hitTop = lastP && lastP.top && rs.length >= 2 && rs.every(s => +s.r >= lastP.top);
   const heavierBlock = lastP && p.top && p.top < lastP.top;
   const lighterBlock = lastP && p.top && p.top > lastP.top + 2;
-  if (hitTop || heavierBlock) return { kg: lastKg + step, why: hitTop ? `You hit ${lastP.top} reps on every set last time.` : "New block with fewer reps: go a little heavier." };
-  if (lighterBlock) return { kg: Math.max(0, lastKg - step), why: "New block with more reps: go a little lighter." };
-  return { kg: lastKg, why: "Same weight. Aim for 1 more rep than last time." };
+  if (hitTop || heavierBlock) return { kg: lastKg + step, why: hitTop ? `Geçen sefer her sette ${lastP.top} tekrara ulaştın.` : "Yeni blokta tekrar sayısı daha az: ağırlığı biraz artır." };
+  if (lighterBlock) return { kg: Math.max(0, lastKg - step), why: "Yeni blokta tekrar sayısı daha fazla: ağırlığı biraz azalt." };
+  return { kg: lastKg, why: "Aynı ağırlık. Geçen seferden 1 tekrar fazlasını hedefle." };
 }
 function howHTML(id) {
   const e = EX[id];
   const steps = (e.how || []).map(s => `<li>${esc(s)}</li>`).join("");
-  const avoid = e.avoid ? `<div class="avoid"><b>Avoid:</b><ul>${e.avoid.map(a => `<li>${esc(a).replace(/&lt;(\/?)b&gt;/g, "<$1b>")}</li>`).join("")}</ul></div>` : "";
+  const avoid = e.avoid ? `<div class="avoid"><b>Kaçın:</b><ul>${e.avoid.map(a => `<li>${esc(a).replace(/&lt;(\/?)b&gt;/g, "<$1b>")}</li>`).join("")}</ul></div>` : "";
   const vids = (VIDEOS[id] || []).map(v => `<a class="vid" href="${esc(v.u)}" target="_blank" rel="noopener">▶ ${esc(v.l)} ↗</a>`).join("");
   return `<details class="how"><summary>How to do it</summary><ol>${steps}</ol>${avoid}${vids}</details>`;
 }
@@ -290,9 +291,9 @@ function viewDay(dateIso) {
   const m = dayMods(plan, week, ci); const pr = countProgress(dateIso); const inP = inProgram(date);
   const weekTxt = inP ? `Week ${week} of 16 · ${m.block.name}` : (week < 1 ? "Your plan starts Mon 16 Nov" : "16 weeks finished!");
   const hab = (S.habits[dateIso] || {});
-  const measure = isMeasureDay(dateIso) ? `<div class="card mcard"><h3>📏 Measurement day</h3><p class="small">Do this first thing in the morning: after the toilet, before eating or drinking. Also take photos (front, side, back). See the <a href="#measure">Measure tab</a> for exactly where to measure.</p>${measForm(dateIso, "dm")}</div>` : "";
+  const measure = isMeasureDay(dateIso) ? `<div class="card mcard"><h3>📏 Measurement day</h3><p class="small">Sabah ilk iş yap: tuvaletten sonra, bir şey yiyip içmeden önce. Fotoğraf da çek (önden, yandan, arkadan). Tam olarak nereden ölçeceğin <a href="#measure">Measure sekmesinde</a>.</p>${measForm(dateIso, "dm")}</div>` : "";
   const blockNote = plan.gym && inP && week === blockOf(week).w[0] ?`<div class="note accent"><strong>${esc(m.block.name)} block:</strong> ${esc(m.block.note)}</div>` : "";
-  const brace = plan.gym ? `<details class="note warn"><summary><strong>Back reminders</strong> (tap)</summary><ul><li>Brace before every rep: breathe into your belly, then tighten.</li><li>Move at the hips, never by arching or rounding your lower back.</li><li>Between sets, stand tall with shoulders down and back.</li><li><b>Pain rule:</b> mild (3/10 or less) and gone by tomorrow is OK. Sharp pain, pain down a leg, numbness or pain that grows means stop.</li></ul></details>` : "";
+  const brace = plan.gym ? `<details class="note warn"><summary><strong>Back reminders</strong> (tap)</summary><ul><li>Her tekrardan önce karnını kilitle (brace): karnına nefes al, sonra sıkılaştır.</li><li>Hareketi kalçadan yap; asla belini çukurlaştırarak ya da yuvarlayarak değil.</li><li>Setler arasında dik dur, omuzlar aşağıda ve geride.</li><li><b>Ağrı kuralı:</b> hafif (10 üzerinden 3 veya altı) ve ertesi gün geçen ağrı sorun değil. Keskin ağrı, bacağa yayılan ağrı, uyuşma ya da artan ağrı varsa dur.</li></ul></details>` : "";
   const blocks = plan.b.map((b, bi) => {
     if (b.yoga) { const k = bi + ":yoga"; const dn = !!((S.logs[dateIso] || {}).chk || {})[k];
       return `<div class="block"><div class="block-h"><h3>Yoga class</h3><span class="t">pick one</span></div><div class="ex vlist${dn ? " isdone" : ""}" data-row="${k}"><small class="s">Gentle beginner classes, kind to your lower back.</small>${YOGA.map(v => `<a href="${esc(v.u)}" target="_blank" rel="noopener">▶ ${esc(v.l.replace("Watch the video · ", ""))} ↗</a>`).join("")}<label class="single"><input type="checkbox" data-c="${k}" ${dn ? "checked" : ""}> Done</label></div></div>`; }
@@ -303,8 +304,8 @@ function viewDay(dateIso) {
   <div class="hero"><div class="small" style="color:#fff;opacity:.92">${esc(fmt(date))} · ${esc(weekTxt)}</div><h1>${esc(plan.t)}</h1><div class="sub">${esc(plan.s)}</div><div style="margin-top:8px">${ph}</div><div class="progress"><i id="pbar" style="width:${pr.total ? Math.round(pr.done / pr.total * 100) : 0}%"></i></div><div class="small" style="color:#fff;opacity:.92;margin-top:4px" id="ptxt">${pr.done} of ${pr.total} done</div></div>
   ${m.notes.length ? `<div class="note good"><strong>Today:</strong> ${m.notes.map(esc).join(" ")}</div>` : ""}
   ${m.food ? `<div class="note accent"><strong>Food today:</strong> ${esc(m.food)}</div>` : ""}
-  ${dateIso === S.gymEnd && plan.gym && !plan.home ? `<div class="note accent"><strong>Last gym day!</strong> From Monday your Mon/Wed/Fri workouts are home mat workouts. Write down your best hip thrust weight today.</div>` : ""}
-  ${plan.home ? `<div class="note accent"><strong>Home workout:</strong> same goals, no machines. Do the reps slowly and squeeze hard. To make it harder, add reps or put a backpack with books on your hips for the sofa hip thrust.</div>` : ""}
+  ${dateIso === S.gymEnd && plan.gym && !plan.home ? `<div class="note accent"><strong>Last gym day!</strong> Pazartesiden itibaren pazartesi/çarşamba/cuma antrenmanların evde mat antrenmanı. Bugün en iyi hip thrust ağırlığını not et.</div>` : ""}
+  ${plan.home ? `<div class="note accent"><strong>Home workout:</strong> hedefler aynı, makine yok. Tekrarları yavaş yap ve güçlü sık. Zorlaştırmak için tekrar ekle ya da kanepede hip thrust yaparken kalçanın üstüne kitap dolu bir sırt çantası koy.</div>` : ""}
   ${blockNote}${measure}
   <div class="card"><h3>Daily habits</h3><div class="habits">${HABITS.map(h => `<label class="chk"><input type="checkbox" data-h="${h[0]}" data-date="${dateIso}" ${hab[h[0]] ? "checked" : ""}>${esc(h[1])}</label>`).join("")}</div></div>
   ${brace}${blocks}`;
@@ -404,38 +405,38 @@ function viewOverview() {
 }
 /* ---------- food ---------- */
 const RECIPES = {
-  "Breakfasts": [
-    { n: "Overnight protein oats", p: 28, k: 400, t: "5 min, the night before", ing: ["40 g oats", "150 g skyr or Greek yogurt", "100 ml milk", "1 tsp chia seeds", "Handful of berries", "Cinnamon"], how: ["Mix oats, skyr, milk, chia and cinnamon in a jar.", "Leave in the fridge overnight.", "Top with berries in the morning."], tip: "Dairy breakfast: take your iron tablet at a different time." },
-    { n: "Menemen (Turkish eggs with peppers)", p: 22, k: 380, t: "15 min", ing: ["2 eggs + 1 egg white", "1 green pepper, 1 red pepper", "2 tomatoes (or ½ can)", "1 tsp olive oil", "Pul biber, salt", "1 slice wholegrain bread"], how: ["Soften chopped peppers in the oil for 5 min.", "Add chopped tomatoes and cook until saucy.", "Stir in the eggs gently until just set.", "Serve with the bread."], tip: "Peppers and tomatoes are full of vitamin C, which helps you absorb iron." },
-    { n: "Spinach & feta omelette", p: 28, k: 380, t: "10 min", ing: ["2 eggs + 2 egg whites", "Big handful of spinach", "20 g feta", "1 slice wholegrain toast"], how: ["Wilt the spinach in a pan.", "Pour over the beaten eggs and cook on low.", "Add the feta, fold and serve with toast."] },
-    { n: "Banana protein pancakes", p: 32, k: 420, t: "15 min", ing: ["1 ripe banana", "2 eggs", "30 g oats", "½ scoop protein powder", "100 g Greek yogurt to top", "Berries"], how: ["Blend banana, eggs, oats and protein powder.", "Cook small pancakes in a non-stick pan, 1–2 min per side.", "Top with yogurt and berries."] },
-    { n: "Smoked salmon rye toast", p: 25, k: 360, t: "5 min", ing: ["2 slices rye bread", "60 g smoked salmon", "50 g cottage cheese", "Cucumber, dill, lemon"], how: ["Spread cottage cheese on the rye.", "Top with salmon, cucumber, dill and lemon."], tip: "Salmon gives you some vitamin D." }
+  "Kahvaltılar": [
+    { n: "Proteinli gece yulafı (overnight oats)", p: 28, k: 400, t: "5 dk, bir gece önceden", ing: ["40 g yulaf", "150 g skyr ya da süzme yoğurt", "100 ml süt", "1 çay kaşığı chia tohumu", "Bir avuç orman meyvesi", "Tarçın"], how: ["Yulaf, skyr, süt, chia ve tarçını bir kavanozda karıştır.", "Gece boyunca buzdolabında beklet.", "Sabah üstüne orman meyvelerini ekle."], tip: "Süt ürünlü kahvaltı: demir tabletini başka bir saatte al." },
+    { n: "Menemen", p: 22, k: 380, t: "15 dk", ing: ["2 yumurta + 1 yumurta akı", "1 yeşil biber, 1 kırmızı biber", "2 domates (ya da ½ kutu)", "1 çay kaşığı zeytinyağı", "Pul biber, tuz", "1 dilim tam tahıllı ekmek"], how: ["Doğranmış biberleri yağda 5 dk yumuşat.", "Doğranmış domatesleri ekle, suyunu salıp sos kıvamına gelene kadar pişir.", "Yumurtaları ekle ve hafifçe karıştırarak tam pişene kadar tut.", "Ekmekle servis et."], tip: "Biber ve domates C vitamini dolu; demiri emmene yardım eder." },
+    { n: "Ispanaklı feta peynirli omlet", p: 28, k: 380, t: "10 dk", ing: ["2 yumurta + 2 yumurta akı", "Büyük bir avuç ıspanak", "20 g feta (beyaz peynir)", "1 dilim tam tahıllı kızarmış ekmek"], how: ["Ispanağı tavada söndür.", "Çırpılmış yumurtaları üstüne dök ve kısık ateşte pişir.", "Fetayı ekle, ikiye katla ve ekmekle servis et."] },
+    { n: "Muzlu proteinli pankek", p: 32, k: 420, t: "15 dk", ing: ["1 olgun muz", "2 yumurta", "30 g yulaf", "½ ölçek protein tozu", "Üstüne 100 g süzme yoğurt", "Orman meyveleri"], how: ["Muz, yumurta, yulaf ve protein tozunu blenderdan geçir.", "Yapışmaz tavada küçük pankekler pişir, her yüzü 1–2 dk.", "Üstüne yoğurt ve orman meyveleri koy."] },
+    { n: "Füme somonlu çavdar ekmeği", p: 25, k: 360, t: "5 dk", ing: ["2 dilim çavdar ekmeği", "60 g füme somon", "50 g cottage peyniri", "Salatalık, dereotu, limon"], how: ["Cottage peynirini çavdar ekmeğine sür.", "Üstüne somon, salatalık, dereotu ve limon ekle."], tip: "Somon biraz D vitamini de verir." }
   ],
-  "Lunches": [
-    { n: "Chicken quinoa bowl", p: 40, k: 550, t: "10 min with meal prep", ing: ["100 g cooked chicken breast", "120 g cooked quinoa", "80 g chickpeas", "Spinach, peppers, cucumber", "Lemon + 1 tsp olive oil"], how: ["Put everything in a bowl.", "Dress with lemon and olive oil, salt and pepper."] },
-    { n: "Lentil, feta & herb salad", p: 30, k: 480, t: "10 min", ing: ["150 g cooked green or brown lentils", "Cucumber, tomato, red onion, parsley", "30 g feta", "80 g chicken breast (optional)", "Lemon, olive oil, sumac"], how: ["Chop the vegetables and herbs.", "Mix with lentils and feta.", "Dress with lemon, a little oil and sumac."], tip: "Iron-rich, and the lemon and tomato help absorb it." },
-    { n: "Mercimek çorbası + side", p: 28, k: 480, t: "30 min, makes 4", ing: ["200 g red lentils", "1 onion, 1 carrot", "1 tbsp tomato paste", "1.2 L stock", "Cumin, paprika, lemon", "Side: 2-egg omelette or 100 g chicken"], how: ["Soften onion and carrot, add tomato paste and spices.", "Add lentils and stock, simmer 20 min.", "Blend smooth, finish with lemon.", "One bowl is ~13 g protein, so add the omelette or chicken on the side."] },
-    { n: "Salmon, quinoa & avocado salad", p: 30, k: 520, t: "15 min", ing: ["100 g cooked salmon", "100 g cooked quinoa", "¼ avocado", "Spinach, cucumber, cherry tomatoes", "Lemon"], how: ["Flake the salmon over quinoa and greens.", "Add avocado and tomatoes, squeeze lemon over."] },
-    { n: "Chickpea smash wrap", p: 35, k: 480, t: "10 min", ing: ["100 g chickpeas", "50 g Greek yogurt", "Lemon, mustard, chopped celery or pickles", "80 g chicken breast", "1 wholegrain wrap, spinach"], how: ["Mash chickpeas with yogurt, lemon and mustard.", "Fill the wrap with the smash, chicken and spinach."] }
+  "Öğle yemekleri": [
+    { n: "Tavuklu kinoa kasesi", p: 40, k: 550, t: "hazırlık yapılmışsa 10 dk", ing: ["100 g pişmiş tavuk göğsü", "120 g pişmiş kinoa", "80 g nohut", "Ispanak, biber, salatalık", "Limon + 1 çay kaşığı zeytinyağı"], how: ["Hepsini bir kaseye koy.", "Limon, zeytinyağı, tuz ve karabiberle tatlandır."] },
+    { n: "Mercimekli feta peynirli yeşillik salatası", p: 30, k: 480, t: "10 dk", ing: ["150 g haşlanmış yeşil mercimek", "Salatalık, domates, kırmızı soğan, maydanoz", "30 g feta", "80 g tavuk göğsü (isteğe bağlı)", "Limon, zeytinyağı, sumak"], how: ["Sebzeleri ve yeşillikleri doğra.", "Mercimek ve fetayla karıştır.", "Limon, biraz yağ ve sumakla tatlandır."], tip: "Demir açısından zengin; limon ve domates emilimine yardım eder." },
+    { n: "Mercimek çorbası + yanına", p: 28, k: 480, t: "30 dk, 4 porsiyon", ing: ["200 g kırmızı mercimek", "1 soğan, 1 havuç", "1 yemek kaşığı salça", "1,2 L et ya da sebze suyu", "Kimyon, toz kırmızı biber, limon", "Yanına: 2 yumurtalı omlet ya da 100 g tavuk"], how: ["Soğan ve havucu yumuşat, salça ve baharatları ekle.", "Mercimek ve suyu ekle, 20 dk kısık ateşte pişir.", "Blenderdan geçir, limonla bitir.", "Bir kase ~13 g protein; yanına omlet ya da tavuk ekle."] },
+    { n: "Somonlu kinoa ve avokado salatası", p: 30, k: 520, t: "15 dk", ing: ["100 g pişmiş somon", "100 g pişmiş kinoa", "¼ avokado", "Ispanak, salatalık, çeri domates", "Limon"], how: ["Somonu kinoa ve yeşilliklerin üstüne didikle.", "Avokado ve domatesleri ekle, üstüne limon sık."] },
+    { n: "Ezme nohutlu dürüm", p: 35, k: 480, t: "10 dk", ing: ["100 g nohut", "50 g süzme yoğurt", "Limon, hardal, doğranmış kereviz sapı ya da turşu", "80 g tavuk göğsü", "1 tam buğday lavaş, ıspanak"], how: ["Nohudu yoğurt, limon ve hardalla ez.", "Lavaşı nohut ezmesi, tavuk ve ıspanakla doldur."] }
   ],
-  "Dinners": [
-    { n: "Beef & lentil bolognese", p: 35, k: 560, t: "30 min, makes 4", ing: ["500 g 5% beef mince", "120 g red lentils", "1 onion, 2 garlic cloves, 1 carrot", "2 cans chopped tomatoes", "Italian herbs", "Wholewheat pasta or quinoa (60 g dry per portion)"], how: ["Brown the beef with onion, garlic and carrot.", "Add lentils, tomatoes, herbs and 300 ml water.", "Simmer 20 min until the lentils are soft.", "Serve over pasta or quinoa."], tip: "Your best iron meal. Have it during and right after your period." },
-    { n: "Etli nohut (beef & chickpea stew)", p: 35, k: 550, t: "40 min, makes 4", ing: ["400 g lean beef, cubed", "2 cans chickpeas", "1 onion, 2 tbsp tomato paste", "1 pepper", "Cumin, paprika", "Quinoa to serve"], how: ["Brown the beef with onion.", "Add tomato paste, pepper, spices and water to cover.", "Simmer 25 min, add chickpeas, cook 10 more.", "Serve with quinoa and a salad."], tip: "Beef + chickpeas = lots of iron." },
-    { n: "Air-fryer salmon & quinoa", p: 30, k: 550, t: "15 min", ing: ["120 g salmon fillet", "120 g cooked quinoa", "Broccoli, peppers", "Lemon, garlic, dill"], how: ["Season salmon with lemon, garlic and dill.", "Air fry at 200°C for 10–12 min with the vegetables.", "Serve on quinoa. Take your vitamin D with this meal."] },
-    { n: "Beef & quinoa stuffed peppers", p: 32, k: 500, t: "40 min, makes 3", ing: ["350 g 5% beef mince", "3 large peppers, halved", "150 g cooked quinoa", "1 can chopped tomatoes", "1 onion, garlic, cumin, paprika", "A little grated cheese (optional)"], how: ["Brown the mince with onion, garlic and spices.", "Stir in half the tomatoes and the quinoa.", "Fill the pepper halves, pour the rest of the tomatoes around them.", "Bake at 190°C for 25 min."], tip: "Beef for iron, peppers for vitamin C: a perfect pair." },
-    { n: "Chickpea & tofu spinach curry", p: 28, k: 520, t: "25 min", ing: ["150 g firm tofu, cubed", "100 g chickpeas", "Big handful of spinach", "½ can chopped tomatoes", "Curry paste or garam masala, garlic, ginger", "100 g cooked quinoa"], how: ["Crisp the tofu in the air fryer or a pan.", "Cook garlic, ginger and spices, add tomatoes and chickpeas.", "Stir in spinach and tofu. Squeeze lemon on top for vitamin C.", "Serve on quinoa."] },
-    { n: "Chicken fajita quinoa bowl", p: 38, k: 540, t: "20 min", ing: ["130 g chicken breast, sliced", "Peppers, onion", "Fajita spice", "100 g cooked quinoa", "Salsa, 2 tbsp Greek yogurt"], how: ["Toss chicken and peppers in the spice.", "Pan-fry or air fry for 12–15 min.", "Serve on quinoa with salsa and yogurt."] },
-    { n: "Sheet-pan lemon chicken & chickpeas", p: 40, k: 520, t: "30 min", ing: ["130 g chicken breast", "100 g chickpeas", "Red onion, peppers, courgette", "Lemon, garlic, oregano, 1 tsp olive oil"], how: ["Put everything on a tray with lemon, garlic, oregano and oil.", "Roast at 200°C for 25 min."] }
+  "Akşam yemekleri": [
+    { n: "Kıymalı mercimekli bolonez", p: 35, k: 560, t: "30 dk, 4 porsiyon", ing: ["500 g %5 yağlı dana kıyma", "120 g kırmızı mercimek", "1 soğan, 2 diş sarımsak, 1 havuç", "2 kutu doğranmış domates", "İtalyan otları", "Tam buğday makarna ya da kinoa (porsiyon başı 60 g kuru)"], how: ["Kıymayı soğan, sarımsak ve havuçla kavur.", "Mercimek, domates, otlar ve 300 ml su ekle.", "Mercimekler yumuşayana kadar 20 dk kısık ateşte pişir.", "Makarna ya da kinoanın üstünde servis et."], tip: "En iyi demir öğünün. Regl sırasında ve hemen sonrasında ye." },
+    { n: "Etli nohut", p: 35, k: 550, t: "40 dk, 4 porsiyon", ing: ["400 g yağsız kuşbaşı dana eti", "2 kutu nohut", "1 soğan, 2 yemek kaşığı salça", "1 biber", "Kimyon, toz kırmızı biber", "Yanına kinoa"], how: ["Eti soğanla kavur.", "Salça, biber, baharatlar ve üstünü geçecek kadar su ekle.", "25 dk pişir, nohudu ekle, 10 dk daha pişir.", "Kinoa ve salatayla servis et."], tip: "Et + nohut = bol demir." },
+    { n: "Air fryer'da somon ve kinoa", p: 30, k: 550, t: "15 dk", ing: ["120 g somon fileto", "120 g pişmiş kinoa", "Brokoli, biber", "Limon, sarımsak, dereotu"], how: ["Somonu limon, sarımsak ve dereotuyla tatlandır.", "Sebzelerle birlikte air fryer'da 200°C'de 10–12 dk pişir.", "Kinoanın üstünde servis et. D vitaminini bu öğünle al."] },
+    { n: "Kıymalı kinoalı fırın biber dolması", p: 32, k: 500, t: "40 dk, 3 porsiyon", ing: ["350 g %5 yağlı dana kıyma", "3 büyük biber, ikiye kesilmiş", "150 g pişmiş kinoa", "1 kutu doğranmış domates", "1 soğan, sarımsak, kimyon, toz kırmızı biber", "Biraz rendelenmiş peynir (isteğe bağlı)"], how: ["Kıymayı soğan, sarımsak ve baharatlarla kavur.", "Domatesin yarısını ve kinoayı karıştır.", "Biber yarımlarını doldur, kalan domatesi etrafına dök.", "190°C fırında 25 dk pişir."], tip: "Demir için et, C vitamini için biber: mükemmel ikili." },
+    { n: "Nohutlu tofulu ıspanaklı köri", p: 28, k: 520, t: "25 dk", ing: ["150 g sert tofu, küp doğranmış", "100 g nohut", "Büyük bir avuç ıspanak", "½ kutu doğranmış domates", "Köri ezmesi ya da garam masala, sarımsak, zencefil", "100 g pişmiş kinoa"], how: ["Tofuyu air fryer'da ya da tavada çıtırlaştır.", "Sarımsak, zencefil ve baharatları pişir, domates ve nohudu ekle.", "Ispanak ve tofuyu karıştır. C vitamini için üstüne limon sık.", "Kinoanın üstünde servis et."] },
+    { n: "Tavuk fajita kinoa kasesi", p: 38, k: 540, t: "20 dk", ing: ["130 g dilimlenmiş tavuk göğsü", "Biber, soğan", "Fajita baharatı", "100 g pişmiş kinoa", "Salsa, 2 yemek kaşığı süzme yoğurt"], how: ["Tavuk ve biberleri baharatla harmanla.", "Tavada ya da air fryer'da 12–15 dk pişir.", "Kinoanın üstünde salsa ve yoğurtla servis et."] },
+    { n: "Fırın tepsisinde limonlu tavuk ve nohut", p: 40, k: 520, t: "30 dk", ing: ["130 g tavuk göğsü", "100 g nohut", "Kırmızı soğan, biber, kabak", "Limon, sarımsak, kekik, 1 çay kaşığı zeytinyağı"], how: ["Hepsini limon, sarımsak, kekik ve yağla bir tepsiye koy.", "200°C fırında 25 dk pişir."] }
   ],
-  "Snacks (100–300 kcal)": [
-    { n: "Greek yogurt + berries", p: 15, k: 150, ing: ["150 g Greek yogurt or skyr", "Berries"] },
-    { n: "Protein shake + fruit", p: 25, k: 200, ing: ["1 scoop protein powder in water", "An orange or apple"] },
-    { n: "Green protein smoothie", p: 30, k: 280, ing: ["1 scoop protein powder", "1 small banana", "Handful of spinach", "200 ml milk"] },
-    { n: "Cottage cheese + cucumber or pineapple", p: 14, k: 140, ing: ["120 g cottage cheese", "Cucumber or pineapple"] },
-    { n: "Crispy roasted chickpeas", p: 7, k: 150, ing: ["100 g chickpeas", "Paprika, salt", "Air fry 200°C 12 min"] },
-    { n: "Egg muffin bites (2)", p: 12, k: 150, ing: ["2 eggs, peppers, spinach", "Bake in muffin cups 180°C 18 min"] },
-    { n: "Hummus + veg sticks", p: 6, k: 180, ing: ["3 tbsp hummus", "Carrot, cucumber, pepper sticks"] },
-    { n: "Sweet craving", p: 4, k: 150, ing: ["2 squares dark chocolate (70%+)", "10 almonds"] }
+  "Ara öğünler (100–300 kcal)": [
+    { n: "Süzme yoğurt + orman meyveleri", p: 15, k: 150, ing: ["150 g süzme yoğurt ya da skyr", "Orman meyveleri"] },
+    { n: "Protein shake + meyve", p: 25, k: 200, ing: ["Suyla 1 ölçek protein tozu", "Bir portakal ya da elma"] },
+    { n: "Yeşil proteinli smoothie", p: 30, k: 280, ing: ["1 ölçek protein tozu", "1 küçük muz", "Bir avuç ıspanak", "200 ml süt"] },
+    { n: "Cottage peyniri + salatalık ya da ananas", p: 14, k: 140, ing: ["120 g cottage peyniri", "Salatalık ya da ananas"] },
+    { n: "Çıtır fırın nohut", p: 7, k: 150, ing: ["100 g nohut", "Toz kırmızı biber, tuz", "Air fryer'da 200°C'de 12 dk"] },
+    { n: "Yumurtalı muffin (2 adet)", p: 12, k: 150, ing: ["2 yumurta, biber, ıspanak", "Muffin kalıbında 180°C'de 18 dk pişir"] },
+    { n: "Humus + sebze çubukları", p: 6, k: 180, ing: ["3 yemek kaşığı humus", "Havuç, salatalık, biber çubukları"] },
+    { n: "Tatlı krizi", p: 4, k: 150, ing: ["2 kare bitter çikolata (%70+)", "10 badem"] }
   ]
 };
 function recipeHTML(r) {
@@ -443,25 +444,25 @@ function recipeHTML(r) {
   <ul class="clean" style="margin-top:8px">${r.ing.map(i => `<li>${esc(i)}</li>`).join("")}</ul>${r.how ? `<ol class="clean">${r.how.map(i => `<li>${esc(i)}</li>`).join("")}</ol>` : ""}${r.tip ? `<p class="small" style="color:var(--sage);margin:0">${esc(r.tip)}</p>` : ""}</details>`;
 }
 function viewFood() {
-  return `<h1>Food</h1>
-  <p><b>Every day: 1,650–1,750 kcal and 100–115 g protein.</b> Expect about 0.25 kg fat loss a week; your waist shrinks faster than the scale.</p>
-  <div class="stats"><div class="stat"><b>100–115 g</b><span>protein</span></div><div class="stat"><b>~170 g</b><span>carbs</span></div><div class="stat"><b>50–60 g</b><span>fat</span></div></div>
-  <h2>Build every plate</h2><div class="soft"><ul class="clean"><li><b>½ plate vegetables</b> (salad, peppers, broccoli, spinach)</li><li><b>¼ plate protein</b>, about your palm: chicken breast, salmon, lean beef, eggs, tofu, lentils</li><li><b>¼ plate carbs</b>, about a cupped hand: quinoa, wholewheat pasta, potatoes, wholegrain bread, oats</li><li><b>1 thumb of fat</b>: olive oil, avocado, nuts, feta</li></ul></div>
-  <h2>A typical day</h2><div class="card">
-    <div class="meal"><span class="m">Breakfast</span><span class="k">~30 g · 400</span><small>Pick one breakfast below</small></div>
-    <div class="meal"><span class="m">Lunch</span><span class="k">~35 g · 500</span><small>Pick one lunch</small></div>
-    <div class="meal"><span class="m">Snack</span><span class="k">~20 g · 200</span><small>Pick one snack</small></div>
-    <div class="meal"><span class="m">Dinner</span><span class="k">~33 g · 550</span><small>Pick one dinner</small></div>
-    <div class="total"><span>Total</span><span>~118 g · ~1,650–1,750 kcal</span></div></div>
+  return `<h1>Beslenme</h1>
+  <p><b>Her gün: 1.650–1.750 kcal ve 100–115 g protein.</b> Haftada yaklaşık 0,25 kg yağ kaybı bekle; belin tartıdan daha hızlı incelir.</p>
+  <div class="stats"><div class="stat"><b>100–115 g</b><span>protein</span></div><div class="stat"><b>~170 g</b><span>karbonhidrat</span></div><div class="stat"><b>50–60 g</b><span>yağ</span></div></div>
+  <h2>Her tabağı böyle kur</h2><div class="soft"><ul class="clean"><li><b>Tabağın ½'si sebze</b> (salata, biber, brokoli, ıspanak)</li><li><b>Tabağın ¼'ü protein</b>, yaklaşık avuç için kadar: tavuk göğsü, somon, yağsız dana eti, yumurta, tofu, mercimek</li><li><b>Tabağın ¼'ü karbonhidrat</b>, yaklaşık bir avuç dolusu: kinoa, tam buğday makarna, patates, tam tahıllı ekmek, yulaf</li><li><b>1 başparmak kadar yağ</b>: zeytinyağı, avokado, kuruyemiş, feta</li></ul></div>
+  <h2>Örnek bir gün</h2><div class="card">
+    <div class="meal"><span class="m">Kahvaltı</span><span class="k">~30 g · 400</span><small>Aşağıdan bir kahvaltı seç</small></div>
+    <div class="meal"><span class="m">Öğle</span><span class="k">~35 g · 500</span><small>Bir öğle yemeği seç</small></div>
+    <div class="meal"><span class="m">Ara öğün</span><span class="k">~20 g · 200</span><small>Bir ara öğün seç</small></div>
+    <div class="meal"><span class="m">Akşam</span><span class="k">~33 g · 550</span><small>Bir akşam yemeği seç</small></div>
+    <div class="total"><span>Toplam</span><span>~118 g · ~1.650–1.750 kcal</span></div></div>
   ${Object.entries(RECIPES).map(([g, list]) => `<h2>${esc(g)}</h2>${list.map(recipeHTML).join("")}`).join("")}
-  <h2>Sunday meal prep (45 min)</h2><div class="card"><ol class="clean"><li>Bake 600 g chicken breast: 200°C for 18–20 min (see the tips below).</li><li>Cook 250 g dry quinoa (makes about 4 portions).</li><li>Make a big pot of bolognese, etli nohut or lentil soup and freeze some.</li><li>Chop peppers, cucumber and carrots into boxes.</li><li>Make a jar of dressing (lemon, olive oil, mustard).</li></ol><p class="small" style="margin:0">Keeps 4 days in the fridge. Your lunches are then 5 minutes.</p></div>
-  <h2>Juicy chicken breast, every time</h2><div class="card"><ul class="clean"><li><b>Quick brine:</b> 15 min in water with 1 tbsp salt per litre. Pat dry.</li><li><b>Air fryer:</b> 200°C, 15–18 min, turn halfway. <b>Oven:</b> 200°C, 18–22 min.</li><li>Let it rest 5 min before cutting.</li><li><b>Marinades:</b> yogurt + lemon + garlic + paprika · olive oil + oregano + lemon · tomato paste + pul biber + cumin · soy sauce + honey + ginger (small amount).</li></ul></div>
-  <h2>Your shopping list</h2><div class="card"><ul class="clean"><li><b>Protein:</b> chicken breast, salmon, 5% beef mince, eggs, firm tofu, skyr / Greek yogurt, cottage cheese, feta, protein powder</li><li><b>Legumes:</b> red and green lentils, canned chickpeas, hummus</li><li><b>Carbs:</b> quinoa, oats, wholegrain or rye bread, wholewheat pasta, potatoes, wraps</li><li><b>Vegetables:</b> spinach, peppers, tomatoes, cucumber, broccoli, courgette, onion, garlic, carrots</li><li><b>Fruit:</b> berries (frozen are fine), oranges, kiwis, bananas, lemons</li><li><b>Extras:</b> olive oil, tomato paste, cans of tomatoes, spices (cumin, paprika, pul biber, oregano), dark chocolate, almonds, chia</li></ul></div>
-  <h2>Iron</h2><div class="card"><ul class="clean"><li>Eat lentils, chickpeas, tofu and spinach <b>with vitamin C</b>: peppers, tomato, orange, kiwi, lemon.</li><li>Keep <b>tea, coffee and dairy</b> 1–2 hours away from iron meals and your iron tablet.</li><li>Take the tablet with water or orange juice, e.g. mid-morning.</li><li>Have a beef meal during and right after your period.</li><li>Recheck ferritin with your doctor after about 3 months.</li></ul></div>
-  <h2>Vitamin D</h2><div class="card"><ul class="clean"><li>Take it with a meal that has <b>some fat</b>, like dinner with salmon or olive oil.</li><li>Keep it at a different meal from your iron tablet.</li><li>Recheck after about 3 months.</li></ul></div>
-  <h2>Around your cycle</h2><div class="card"><ul class="clean"><li><b>Period:</b> iron meals (bolognese, etli nohut, lentil salad). Warm soups help cramps.</li><li><b>Before your period:</b> hunger goes up, so add 100–150 kcal (yogurt + berries, a shake). Salty food makes bloating worse.</li><li><b>Cravings:</b> 2 squares of dark chocolate, a protein smoothie, or Greek yogurt with honey and cinnamon.</li></ul></div>
-  <h2>Gym days</h2><div class="note good"><strong>Before:</strong> a meal with protein and carbs 1–3 hours earlier (e.g. overnight oats). <strong>After:</strong> 25–40 g protein (a shake or your next meal).</div>
-  <h2>Eating out</h2><div class="card"><ul class="clean"><li>Choose grilled chicken, salmon or a lentil dish.</li><li>Ask for sauce on the side, and swap rice or chips for salad or a small portion of bulgur/potatoes.</li><li>One meal out never ruins progress. Just go back to normal at the next meal.</li></ul></div>`;
+  <h2>Pazar günü yemek hazırlığı (45 dk)</h2><div class="card"><ol class="clean"><li>600 g tavuk göğsünü fırınla: 200°C'de 18–20 dk (aşağıdaki ipuçlarına bak).</li><li>250 g kuru kinoa pişir (yaklaşık 4 porsiyon).</li><li>Büyük bir tencere bolonez, etli nohut ya da mercimek çorbası yap ve bir kısmını dondur.</li><li>Biber, salatalık ve havucu doğrayıp saklama kaplarına koy.</li><li>Bir kavanoz sos hazırla (limon, zeytinyağı, hardal).</li></ol><p class="small" style="margin:0">Buzdolabında 4 gün dayanır. Böylece öğle yemeklerin 5 dakikada hazır.</p></div>
+  <h2>Her seferinde sulu tavuk göğsü</h2><div class="card"><ul class="clean"><li><b>Hızlı salamura:</b> litre başına 1 yemek kaşığı tuzlu suda 15 dk beklet. Kurula.</li><li><b>Air fryer:</b> 200°C, 15–18 dk, yarısında çevir. <b>Fırın:</b> 200°C, 18–22 dk.</li><li>Kesmeden önce 5 dk dinlendir.</li><li><b>Marinasyonlar:</b> yoğurt + limon + sarımsak + toz kırmızı biber · zeytinyağı + kekik + limon · salça + pul biber + kimyon · soya sosu + bal + zencefil (az miktarda).</li></ul></div>
+  <h2>Alışveriş listen</h2><div class="card"><ul class="clean"><li><b>Protein:</b> tavuk göğsü, somon, %5 yağlı dana kıyma, yumurta, sert tofu, skyr / süzme yoğurt, cottage peyniri, feta, protein tozu</li><li><b>Baklagiller:</b> kırmızı ve yeşil mercimek, konserve nohut, humus</li><li><b>Karbonhidrat:</b> kinoa, yulaf, tam tahıllı ya da çavdar ekmeği, tam buğday makarna, patates, lavaş</li><li><b>Sebze:</b> ıspanak, biber, domates, salatalık, brokoli, kabak, soğan, sarımsak, havuç</li><li><b>Meyve:</b> orman meyveleri (dondurulmuş da olur), portakal, kivi, muz, limon</li><li><b>Diğer:</b> zeytinyağı, salça, konserve domates, baharatlar (kimyon, toz kırmızı biber, pul biber, kekik), bitter çikolata, badem, chia</li></ul></div>
+  <h2>Demir</h2><div class="card"><ul class="clean"><li>Mercimek, nohut, tofu ve ıspanağı <b>C vitamini ile</b> ye: biber, domates, portakal, kivi, limon.</li><li><b>Çay, kahve ve süt ürünlerini</b> demirli öğünlerden ve demir tabletinden 1–2 saat uzak tut.</li><li>Tableti su ya da portakal suyuyla al, örneğin kuşluk vakti.</li><li>Regl sırasında ve hemen sonrasında etli bir öğün ye.</li><li>Yaklaşık 3 ay sonra doktorunla ferritini tekrar kontrol ettir.</li></ul></div>
+  <h2>D vitamini</h2><div class="card"><ul class="clean"><li><b>Biraz yağ</b> içeren bir öğünle al, örneğin somonlu ya da zeytinyağlı akşam yemeği.</li><li>Demir tabletinden farklı bir öğünde al.</li><li>Yaklaşık 3 ay sonra tekrar kontrol ettir.</li></ul></div>
+  <h2>Döngüne göre</h2><div class="card"><ul class="clean"><li><b>Regl:</b> demirli öğünler (bolonez, etli nohut, mercimek salatası). Sıcak çorbalar kramplara iyi gelir.</li><li><b>Regl öncesi:</b> iştah artar, 100–150 kcal ekle (yoğurt + orman meyveleri, bir shake). Tuzlu yiyecekler şişkinliği artırır.</li><li><b>Tatlı krizi:</b> 2 kare bitter çikolata, proteinli smoothie ya da bal ve tarçınlı süzme yoğurt.</li></ul></div>
+  <h2>Antrenman günleri</h2><div class="note good"><strong>Önce:</strong> 1–3 saat önce protein ve karbonhidrat içeren bir öğün (örn. gece yulafı). <strong>Sonra:</strong> 25–40 g protein (bir shake ya da bir sonraki öğün).</div>
+  <h2>Dışarıda yemek</h2><div class="card"><ul class="clean"><li>Izgara tavuk, somon ya da mercimekli bir yemek seç.</li><li>Sosu ayrı iste; pilav ya da patates kızartması yerine salata ya da az bulgur/patates al.</li><li>Dışarıda bir öğün hiçbir zaman ilerlemeni bozmaz. Bir sonraki öğünde normale dön.</li></ul></div>`;
 }
 
 
